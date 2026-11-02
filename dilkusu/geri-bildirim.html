@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Geri bildirim · Dilkuşu</title>
+<meta name="description" content="Dilkuşu için hata bildir, öneride bulun ya da görüşünü paylaş.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="vendor/fonts.css">
+<link rel="stylesheet" href="site.css">
+<style>
+label,legend{display:block;font-weight:800;margin:18px 0 6px;padding:0}
+fieldset{border:0;padding:0;margin:0}
+select,textarea,input[type=email]{width:100%;font:inherit;color:inherit;background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+textarea{min-height:130px;resize:vertical}
+.opt{display:flex;gap:8px;align-items:flex-start;font-weight:600;margin:6px 0}
+.opt input{margin-top:6px}
+.scale{display:flex;gap:6px}
+.scale label{flex:1;margin:0;text-align:center;background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:8px 0;cursor:pointer}
+.scale input{position:absolute;opacity:0}
+.scale label:has(input:checked){background:var(--soft);border-color:var(--cta)}
+.scale label:has(input:focus-visible){outline:2px solid var(--acc)}
+.hint{color:var(--mute);font-size:14px;margin:4px 0 0;font-weight:400}
+button[type=submit]{width:100%;margin-top:22px;border:0;cursor:pointer;font:inherit;font-size:18px}
+.msg{background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:18px 0}
+</style>
+</head>
+<body>
+<header class="top"><a class="brand" href="./"><img src="favicon.svg" width="30" height="30" alt="">Dilkuşu</a><a class="go" href="./">Uygulamayı aç</a></header>
+<main>
+<h1>Geri bildirim</h1>
+<p class="lead">Bir hata mı gördün, bir fikrin mi var? Birkaç satır yeterli. Hesap gerekmez.</p>
+<div id="done" class="msg" hidden role="status"></div>
+<form id="f">
+  <label for="tur">Ne hakkında?</label>
+  <select id="tur" name="tur" required>
+    <option>Genel görüş</option><option>Hata bildirimi</option><option>Öneri</option><option>Eksik içerik</option><option>Teknik sorun</option>
+  </select>
+
+  <label for="ekran">Hangi bölüm ya da soru? <span class="hint">(isteğe bağlı)</span></label>
+  <input id="ekran" name="ekran" type="text" maxlength="300" style="width:100%;font:inherit;color:inherit;background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:10px 12px">
+
+  <label for="mesaj">Mesajın</label>
+  <textarea id="mesaj" name="mesaj" maxlength="2000" required placeholder="Ne gördün, ne olmasını beklerdin?"></textarea>
+
+  <fieldset>
+    <legend>Dilkuşu'nu genel olarak nasıl buldun? <span class="hint">(isteğe bağlı)</span></legend>
+    <div class="scale" id="puan"></div>
+    <p class="hint">1 = hiç beğenmedim, 5 = çok beğendim</p>
+  </fieldset>
+
+  <label for="hedef">Ne için çalışıyorsun? <span class="hint">(isteğe bağlı)</span></label>
+  <select id="hedef" name="hedef">
+    <option value=""></option><option>YDS / e-YDS</option><option>YÖKDİL</option><option>Genel İngilizce</option><option>İş İngilizcesi</option><option>IELTS / TOEFL</option><option>Diğer</option>
+  </select>
+
+  <label for="ucret">Sınav bölümü ücretli olsaydı öder miydin? <span class="hint">(isteğe bağlı)</span></label>
+  <select id="ucret" name="ucret">
+    <option value=""></option><option>Evet, aylık 100 TL'ye kadar</option><option>Evet, aylık 100-250 TL</option><option>Evet, aylık 250 TL üzeri</option><option>Tek seferlik öderdim</option><option>Hayır</option><option>Emin değilim</option>
+  </select>
+
+  <label for="eposta">E-posta <span class="hint">(isteğe bağlı, yalnızca sana dönmek istersem)</span></label>
+  <input id="eposta" name="eposta" type="email" maxlength="200" autocomplete="email">
+
+  <button class="go" type="submit" id="gonder">Gönder</button>
+  <p class="hint" id="not">Yazdıkların Google Forms üzerinden iletilir ve yalnızca Dilkuşu'yu geliştirmek için kullanılır. Ayrıntı: <a href="hakkinda.html#gizlilik">gizlilik</a>. Şifre, kimlik numarası ya da sağlık bilgisi yazma.</p>
+</form>
+</main>
+<footer><p><a href="./">Uygulama</a> · <a href="hakkinda.html">Hakkında</a></p></footer>
+<script src="config.js"></script>
+<script>window.DK_ROOT=''</script>
+<script src="olcum.js"></script>
+<script>
+(function(){
+  var C=window.KA_CONFIG||{},F=C.form,f=document.getElementById('f'),done=document.getElementById('done');
+  var p=document.getElementById('puan');[1,2,3,4,5].forEach(function(n){var l=document.createElement('label');l.innerHTML='<input type="radio" name="puan" value="'+n+'">'+n;p.appendChild(l)});
+  try{var d=JSON.parse(localStorage.getItem('dk_fb')||'null');if(d){if(d.tur)f.tur.value=d.tur;if(d.ekran)f.ekran.value=d.ekran;if(d.mesaj)f.mesaj.value=d.mesaj+'\n';localStorage.removeItem('dk_fb')}}catch(e){}
+  if(!F)document.getElementById('not').innerHTML='Gönder düğmesi GitHub\'da herkese açık bir konu sayfası açar; GitHub hesabı gerekir ve yazdıkların herkes tarafından görülebilir. E-posta adresini bu yolla paylaşma. Ayrıntı: <a href="hakkinda.html#gizlilik">gizlilik</a>.';
+  function val(k){var e=f.elements[k];return e?(e.value||''):''}
+  f.addEventListener('submit',function(ev){
+    ev.preventDefault();
+    var o={tur:val('tur'),ekran:val('ekran'),mesaj:val('mesaj').trim(),puan:val('puan'),hedef:val('hedef'),ucret:val('ucret'),eposta:val('eposta').trim()};
+    if(!o.mesaj)return;
+    if(F&&F.action&&F.entries){
+      var b=new URLSearchParams();Object.keys(F.entries).forEach(function(k){if(o[k])b.append('entry.'+F.entries[k],o[k])});
+      document.getElementById('gonder').disabled=true;
+      fetch(F.action,{method:'POST',mode:'no-cors',body:b}).then(function(){f.hidden=true;done.hidden=false;done.textContent='Teşekkürler, mesajın gönderildi.'}).catch(function(){document.getElementById('gonder').disabled=false;done.hidden=false;done.textContent='Gönderilemedi. İnternet bağlantını kontrol edip tekrar dene.'});
+    }else{
+      var body=[o.ekran&&('Bölüm: '+o.ekran),o.mesaj,o.puan&&('Puan: '+o.puan),o.hedef&&('Hedef: '+o.hedef),o.ucret&&('Ücret: '+o.ucret)].filter(Boolean).join('\n\n');
+      window.open('https://github.com/ysfdurak/ysfdurak.github.io/issues/new?title='+encodeURIComponent('[Dilkuşu] '+o.tur)+'&body='+encodeURIComponent(body).slice(0,6000),'_blank','noopener');
+      done.hidden=false;done.textContent='Açılan GitHub sayfasında gönder düğmesine basarak tamamla.';
+    }
+  });
+})();
+</script>
+</body>
+</html>
