@@ -36,6 +36,7 @@ h2{font:800 1.55rem/1.2 var(--f-d);letter-spacing:-.015em;margin:0 0 6px}
 .app{--c:var(--sql);--t:var(--sql-t);display:flex;flex-direction:column;gap:12px;padding:22px;background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--c);border-radius:12px;text-decoration:none;transition:transform .15s,border-color .15s}
 .app:hover,.app:focus-visible{transform:translateY(-2px);border-color:var(--t)}
 .app.pbi{--c:var(--pbi);--t:var(--pbi-t)} .app.py{--c:var(--py);--t:var(--py-t)}
+.shot{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;object-position:top left;border-radius:8px;border:1px solid var(--line);background:var(--surface-2)}
 .app h3{font:800 1.35rem var(--f-d);margin:0;letter-spacing:-.015em} .app h3 span{color:var(--t)}
 .app p{margin:0;color:var(--muted);font-size:.94rem;flex:1}
 .nums{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:4px 18px;margin:0}
@@ -54,6 +55,7 @@ section{padding:0 0 56px}
 .steps a{font-size:.86rem;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);text-decoration:none}
 .steps a:hover{border-color:var(--ink)}
 .role small{color:var(--muted);font-size:.86rem;line-height:1.45}
+.links{display:flex;flex-wrap:wrap;gap:8px 14px;margin:0}.links a{font-weight:600}
 .how{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;border-top:1px solid var(--line);padding-top:22px}
 .how b{display:block;font:700 1rem var(--f-d);margin-bottom:4px}
 .how p{margin:0;color:var(--muted);font-size:.92rem}
@@ -74,19 +76,21 @@ footer a{font-weight:600}
 <section aria-labelledby="ap">
 <h2 id="ap" hidden>Uygulamalar</h2>
 <div class="apps">
-<a class="app sql" href="/kesit-sql/" data-k="sqlpatika.v1" data-t="245"><h3>Kesit <span>SQL</span></h3><p>Tarayıcıdaki gerçek veritabanında sorgu yaz. Altı SQL programının yazımını karşılaştır.</p><div class="nums"><div><b>245</b><span>ders</span></div><div><b>1.488</b><span>alıştırma</span></div><div><b>540</b><span>pratik görevi</span></div></div><div class="prog"></div><span class="go">SQL'e başla →</span></a>
-<a class="app pbi" href="/kesit-powerbi/" data-k="pbipatika.v1" data-t="115"><h3>Kesit <span>Power BI</span></h3><p>Tarayıcıda DAX ölçüsü yaz, rapor mantığını öğren, vaka paketleriyle Desktop'ta uygula.</p><div class="nums"><div><b>115</b><span>ders</span></div><div><b>918</b><span>alıştırma</span></div><div><b>24</b><span>örnek rapor</span></div></div><div class="prog"></div><span class="go">Power BI'a başla →</span></a>
-<a class="app py" href="/kesit-python/" data-k="pythonpatika.v1" data-t="140"><h3>Kesit <span>Python</span></h3><p>Gerçek Python'ı tarayıcında çalıştır: temellerden pandas'a, otomasyondan yapay zekâya.</p><div class="nums"><div><b>140</b><span>ders</span></div><div><b>3.101</b><span>alıştırma</span></div><div><b>550</b><span>pratik görevi</span></div></div><div class="prog"></div><span class="go">Python'a başla →</span></a>
+<a class="app sql" href="/kesit-sql/" data-k="sql"><img class="shot" src="/kesit-sql/ekran/alistirma.png" alt="Kesit SQL alıştırma ekranı" width="1280" height="800" loading="lazy"><h3>Kesit <span>SQL</span></h3><p>Tarayıcıdaki gerçek veritabanında sorgu yaz. Altı SQL programının yazımını karşılaştır.</p><div class="nums"><div><b>247</b><span>ders</span></div><div><b>1.496</b><span>alıştırma</span></div><div><b>540</b><span>pratik görevi</span></div></div><div class="prog"></div><span class="go">SQL'e başla →</span></a>
+<a class="app pbi" href="/kesit-powerbi/" data-k="pbi"><img class="shot" src="/kesit-powerbi/ekran/rapor.png" alt="Kesit Power BI örnek rapor ekranı" width="1280" height="800" loading="lazy"><h3>Kesit <span>Power BI</span></h3><p>Tarayıcıda DAX ölçüsü yaz, rapor mantığını öğren, vaka paketleriyle Desktop'ta uygula.</p><div class="nums"><div><b>118</b><span>ders</span></div><div><b>937</b><span>alıştırma</span></div><div><b>24</b><span>örnek rapor</span></div></div><div class="prog"></div><span class="go">Power BI'a başla →</span></a>
+<a class="app py" href="/kesit-python/" data-k="python"><img class="shot" src="/kesit-python/ekran/alistirma.png" alt="Kesit Python kod editörü ekranı" width="1280" height="800" loading="lazy"><h3>Kesit <span>Python</span></h3><p>Gerçek Python'ı tarayıcında çalıştır: temellerden pandas'a, otomasyondan yapay zekâya.</p><div class="nums"><div><b>141</b><span>ders</span></div><div><b>3.034</b><span>alıştırma</span></div><div><b>550</b><span>pratik görevi</span></div></div><div class="prog"></div><span class="go">Python'a başla →</span></a>
 </div>
 </section>
 <section aria-labelledby="ry">
 <h2 id="ry">Hangi işi yapmak istiyorsun?</h2>
-<p class="lead">Önerilen sıra aşağıda. Her uygulamanın içinde de bu rollere özel, daha ayrıntılı patikalar var.</p>
+<p class="lead">Rolüne göre önerilen sıra aşağıda. Düğmeler seni o rolün öğrenme yoluna götürür.</p>
 <div class="roles">
-<div class="role"><b>Veri analisti</b><ol class="steps"><li><a href="/kesit-sql/">SQL</a></li><li><a href="/kesit-powerbi/">Power BI</a></li><li><a href="/kesit-python/">Python</a></li></ol><small>Önce veriyi sorgula, sonra raporla, en son tekrar eden analizleri otomatikleştir.</small></div>
-<div class="role"><b>İş zekâsı uzmanı</b><ol class="steps"><li><a href="/kesit-sql/">SQL</a></li><li><a href="/kesit-powerbi/">Power BI</a></li></ol><small>Veri modeli, DAX ve yönetim raporları üzerine yoğunlaş.</small></div>
-<div class="role"><b>Veri bilimci</b><ol class="steps"><li><a href="/kesit-python/">Python</a></li><li><a href="/kesit-sql/">SQL</a></li></ol><small>pandas, istatistik ve makine öğrenmesine SQL ile veri çekmeyi ekle.</small></div>
-<div class="role"><b>Otomasyon ve yapay zekâ</b><ol class="steps"><li><a href="/kesit-python/">Python</a></li></ol><small>Elle yapılan işleri betiklere dök, LLM uygulamaları geliştir.</small></div>
+<div class="role"><b>Veri analisti</b><ol class="steps"><li><a href="/kesit-sql/#patika-analist">SQL</a></li><li><a href="/kesit-powerbi/#patika-analist">Power BI</a></li><li><a href="/kesit-python/#/path/analist">Python</a></li></ol><small>Önce veriyi sorgula, sonra raporla, en son tekrar eden analizleri otomatikleştir.</small></div>
+<div class="role"><b>İş zekâsı uzmanı</b><ol class="steps"><li><a href="/kesit-sql/#patika-bi">SQL</a></li><li><a href="/kesit-powerbi/#patika-gelistirici">Power BI</a></li></ol><small>Veri modeli, DAX ve yönetim raporları üzerine yoğunlaş.</small></div>
+<div class="role"><b>Veri mühendisi</b><ol class="steps"><li><a href="/kesit-sql/#patika-muhendis">SQL</a></li><li><a href="/kesit-python/#/path/muhendis">Python</a></li></ol><small>SQL ile modelle, Python ile veri hatları kur.</small></div>
+<div class="role"><b>Veri bilimci</b><ol class="steps"><li><a href="/kesit-sql/#patika-bilimci">SQL</a></li><li><a href="/kesit-python/#/path/bilimci">Python</a></li></ol><small>SQL ile veri çek; pandas, istatistik ve makine öğrenmesiyle çözümle.</small></div>
+<div class="role"><b>Otomasyon</b><ol class="steps"><li><a href="/kesit-python/#/path/otomasyon">Python</a></li></ol><small>Excel, dosya ve e-posta gibi elle yapılan işleri betiklere dök.</small></div>
+<div class="role"><b>Yapay zekâ</b><ol class="steps"><li><a href="/kesit-python/#/path/ai">Python</a></li></ol><small>LLM API, RAG ve ajanlarla uygulama geliştir.</small></div>
 </div>
 </section>
 <section aria-labelledby="nc">
@@ -97,14 +101,18 @@ footer a{font-weight:600}
 <div><b>Ortak veri setleri</b><p>E-ticaret, banka, İK, kurye, havayolu ve bisiklet verileri hayalidir, uygulamalar arasında ortaktır.</p></div>
 </div>
 </section>
+<section aria-labelledby="bp">
+<h2 id="bp">Bu proje hakkında</h2>
+<p class="lead">Kesit, <b>Yusuf Durak</b>'ın ürün sahibi olarak kurguladığı ücretsiz bir eğitim ve portföy projesidir. Hedef kitleyi, müfredatın kapsamını, öğrenme yollarını ve veri senaryolarını o belirledi; kod ve içerik yapay zekâ (Claude) ile geliştirildi, otomatik testlerle denetlendi.</p>
+<p class="links"><a href="/kesit-sql/#hakkinda">Nasıl yapıldı</a><a href="https://www.linkedin.com/in/yusuf-durak" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/ysfdurak/kesit-sql" target="_blank" rel="noopener">SQL kaynak kodu</a><a href="https://github.com/ysfdurak/kesit-powerbi" target="_blank" rel="noopener">Power BI kaynak kodu</a><a href="https://github.com/ysfdurak/kesit-python" target="_blank" rel="noopener">Python kaynak kodu</a></p>
+</section>
 </main>
 <footer>
-<p>Kesit, <a href="https://www.linkedin.com/in/yusuf-durak" target="_blank" rel="noopener">Yusuf Durak</a> tarafından yapay zekâ (Claude) ile geliştirilen ücretsiz, ticari olmayan bir eğitim ve portföy projesidir. Ürün kararları ve kapsam ona, kod ve içeriğin üretimi yapay zekâ desteğiyle.</p>
-<p>İçerik “olduğu gibi” sunulur. Microsoft, Power BI, Python ve diğer adlar sahiplerinin markalarıdır; bu kuruluşlarla bir bağı yoktur. Bu sayfa veri toplamaz. <a href="https://github.com/ysfdurak" target="_blank" rel="noopener">GitHub</a></p>
+<p>Ücretsiz ve ticari olmayan bir projedir; içerik “olduğu gibi” sunulur. Veri setlerindeki şirket, kişi ve kayıtlar hayalidir. Microsoft, Power BI, Python ve diğer adlar sahiplerinin markalarıdır; bu kuruluşlarla bir bağı yoktur. Bu sayfa veri toplamaz.</p>
 </footer>
 </div>
 <script>
-document.querySelectorAll('.app').forEach(function(a){try{var p=JSON.parse(localStorage.getItem(a.dataset.k)||'null');var n=p&&p.done?Object.keys(p.done).length:0;if(n>0){a.querySelector('.prog').textContent=n+' / '+a.dataset.t+' ders tamam';a.querySelector('.go').textContent='Kaldığın yerden devam et →'}}catch(e){}});
+document.querySelectorAll('.app').forEach(function(a){try{var o=JSON.parse(localStorage.getItem('kesit.ozet.'+a.dataset.k)||'null');if(o&&o.bitti>0&&o.toplam>0){a.querySelector('.prog').textContent=o.bitti+' / '+o.toplam+' ders tamam';a.querySelector('.go').textContent='Kaldığın yerden devam et →'}}catch(e){}});
 </script>
 </body>
 </html>
