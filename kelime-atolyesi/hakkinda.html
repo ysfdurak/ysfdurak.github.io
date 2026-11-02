@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hakkında ve gizlilik · Kelime Atölyesi</title>
+<meta name="description" content="Kelime Atölyesi nedir, verilerin nerede durur, içerik nasıl üretildi ve kullanım koşulları.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="vendor/fonts.css">
+<style>
+:root{--bg:#fff7ef;--surf:#fff;--ink:#2b2140;--mute:#6e6280;--acc:#1e6fe0;--line:#f0e2d4;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#1a1424;--surf:#251d33;--ink:#f5ede6;--mute:#b4a6c2;--acc:#6aa8ff;--line:#3a2f4b;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 Nunito,system-ui,sans-serif}
+main{max-width:680px;margin:0 auto;padding:24px 16px 56px}
+h1,h2{font-family:"Baloo 2",Nunito,sans-serif;line-height:1.2}
+h1{font-size:32px;margin:12px 0 8px}
+h2{font-size:22px;margin:32px 0 6px}
+a{color:var(--acc)}
+ul{padding-left:20px;margin:8px 0}
+li{margin:5px 0}
+.top{display:flex;align-items:center;gap:8px;font-weight:800;text-decoration:none;color:var(--ink)}
+.note{background:var(--surf);border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin:16px 0}
+small{color:var(--mute)}
+</style>
+</head>
+<body>
+<main>
+<a class="top" href="./"><img src="favicon.svg" width="30" height="30" alt="">Uygulamaya dön</a>
+<h1>Kelime Atölyesi hakkında</h1>
+<p>Türkçe konuşanlar için İngilizce çalışma uygulaması. A1'den C2'ye dilbilgisi, kelime, hikâye, diyalog, dinleme ve aralıklı tekrar içerir; YDS, e-YDS ve YÖKDİL için ayrı bir sınav bölümü vardır.</p>
+<div class="note"><b>Beta sürümü.</b> Şu an ücretsiz ve hesapsız. Bazı bölümler ileride ücretli olabilir.</div>
+
+<h2>İçerik nasıl üretildi?</h2>
+<p>Ürün kararlarını ve kapsamı Yusuf Durak belirledi; kod ve içerik yapay zekâ (Claude) ile geliştirildi. İçerik otomatik denetimlerden geçti, ancak henüz bir İngilizce öğretmeni tarafından baştan sona incelenmedi. Bu yüzden hata olabilir. Bir hata görürsen sorunun yanındaki <b>Hata bildir</b> bağlantısını kullan.</p>
+
+<h2>YDS ve YÖKDİL bölümü</h2>
+<ul>
+<li>Uygulamanın ÖSYM, YÖK ya da herhangi bir sınav kurumuyla bağı yoktur.</li>
+<li>Deneme soruları bu uygulama için yazıldı ve ÖSYM'nin çıkmış sorularını içermez.</li>
+<li>Denemelerdeki puan yalnızca doğru sayını gösterir. Gerçek sınav puanını öngörmek için doğrulanmamıştır.</li>
+<li>Sınav tarihi, başvuru ve kurallar için <a href="https://www.osym.gov.tr" rel="noopener">ÖSYM'nin sitesine</a> bak.</li>
+</ul>
+
+<h2>Gizlilik</h2>
+<ul>
+<li><b>Hesap yok.</b> Ad, e-posta ya da şifre istenmez.</li>
+<li><b>İlerlemen yalnızca bu tarayıcıda durur.</b> Uygulamaya yazdığın ad ve hedef gibi bilgiler de dahil, hiçbiri bize gönderilmez. Tarayıcı verisini silersen kaybolur; Profil sayfasından yedek dosyası indirebilirsin.</li>
+<li><b>Eklediğin PDF kitaplar cihazında kalır,</b> bir yere yüklenmez. PDF okuyucu (pdf.js) ilk kullanımda cdnjs ya da jsDelivr'den indirilir; bu servisler teknik olarak IP adresini görür.</li>
+<li><b>Ses,</b> cihazının kendi konuşma motorundan gelir.</li>
+<li><b>Analitik ve çerez yok.</b> Site reklam ve izleme aracı kullanmaz.</li>
+<li><b>Barındırma:</b> Site GitHub Pages üzerindedir. GitHub, hizmeti sunmak ve güvenliği sağlamak için ziyaretçi IP adreslerini kaydedebilir. Ayrıntı: <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" rel="noopener">GitHub gizlilik bildirimi</a>.</li>
+<li><b>Hata bildirimi:</b> Bildirim göndermek GitHub'da herkese açık bir konu sayfası açar. Göndermeden önce metni görürsün; kişisel bilgi yazma.</li>
+</ul>
+
+<h2>Kullanım koşulları</h2>
+<ul>
+<li>Kendi öğrenmen ve ders çalışman için ücretsiz kullanabilirsin.</li>
+<li>Kod ve özgün içerik izinsiz kopyalanamaz, yeniden yayımlanamaz ya da satılamaz. Ayrıntı: <a href="LICENSE.md">LICENSE.md</a>.</li>
+<li>Uygulama “olduğu gibi” sunulur. Sınav sonucu ya da belirli bir puan garantisi vermez.</li>
+</ul>
+
+<h2>Kaynaklar ve lisanslar</h2>
+<ul>
+<li>Kelime seçimi ve seviyeler: <a href="https://github.com/openlanguageprofiles/olp-en-cefrj" rel="noopener">CEFR-J Wordlist</a> (Tono Laboratory, Tokyo University of Foreign Studies) ve Octanove Vocabulary Profile C1/C2 (CC BY-SA 4.0).</li>
+<li>Deyim listesi: MAGPIE (CC BY 4.0) ve Vikisözlük (CC BY-SA).</li>
+<li>Yazı tipleri: Baloo 2 ve Nunito (SIL Open Font License).</li>
+</ul>
+
+<h2>İletişim</h2>
+<p><a href="https://www.linkedin.com/in/yusuf-durak" rel="noopener">Yusuf Durak</a> · <a href="https://github.com/ysfdurak" rel="noopener">GitHub</a></p>
+<p><small>Son güncelleme: 2 Kasım 2026</small></p>
+</main>
+</body>
+</html>
