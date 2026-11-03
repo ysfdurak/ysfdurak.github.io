@@ -76,19 +76,25 @@ footer{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);font-si
 <p>Henüz bir kullanım başarısı ölçmedim. Ölçebildiğim şey, ürünün söylediğini yapıp yapmadığı:</p>
 <div class="tw"><table>
 <tr><th>Ölçüm</th><th>Sonuç</th></tr>
-<!--OLCUM-->
+<tr><td>Gerçek PostgreSQL'de SQL çözümleri</td><td>1.591 çözümün 1.584'ü tarayıcıdaki motorla aynı sonucu verdi. 7 fark biliniyor ve kayıtlı.</td></tr>
+<tr><td>SQL ders ve alıştırma çalıştırması</td><td>9.349 çalıştırma, hata yok. 538 kod kutusu 2.532 kez çalıştı, hata yok.</td></tr>
+<tr><td>Python</td><td>4.621 kontrol geçti. 1.195 örnek koddan yalnızca biri hata veriyor; o da hata okumayı öğreten bilerek hatalı örnek.</td></tr>
+<tr><td>Power BI</td><td>407 DAX alıştırması, 24 örnek rapor ve 5 vaka paketi denetlendi, sorun çıkmadı. Bu denetim gerçek Power BI ile değil, tarayıcıdaki benzetim motoruyla yapıldı.</td></tr>
+<tr><td>Arayüzden çözüm</td><td>Rastgele seçilen 96 SQL ve 97 Power BI alıştırması tarayıcıda çözüldü, başarısız olan yok. Denenen yanlış cevaplar da reddedildi.</td></tr>
+<tr><td>Veri tutarlılığı</td><td>Uçaklarda ışınlanma 2.362'den 0'a, bisikletlerde 114.509'dan 0'a indi.</td></tr>
+<tr><td>Kapsam</td><td>SQL 258 ders ve 1.620 alıştırma. Power BI 118 ders ve 937 alıştırma. Python 141 ders ve 3.034 alıştırma.</td></tr>
 </table></div>
 
 <h2>Yanlış gidenler</h2>
 <ul>
 <li><b>Sayı, kalite demek değildi.</b> Denetim, Python kurulum dersindeki 11 kod görevinin hepsinin metin ayrıştırma olduğunu gösterdi; dersin konusuyla ilgileri yoktu. Alıştırma sayısı büyürken bu tür dolgu görünmez kalmıştı.</li>
-<li><b>Düzeltme yeni hata getirdi.</b> Ad değişikliği iki sınav sorusunun doğru cevabını yok etti. Terimlere İngilizce ekleyen özellik "istemci (prompt)" gibi yanlış eşleşmeler üretti. Testler ikisini de görmedi, bağımsız inceleme buldu. Şimdi ikisi için ayrı denetim var.</li>
+<li><b>Düzeltme yeni hata getirdi.</b> Ad değişikliği iki sınav sorusunun doğru cevabını yok etti. Terimlere İngilizce ekleyen özellik "istemci (prompt)" gibi yanlış eşleşmeler üretti. Testler ikisini de görmedi, işi yapmamış ayrı bir yapay zekâ incelemesi buldu. Şimdi ikisi için ayrı denetim var.</li>
 <li><b>İddiam fazla büyüktü.</b> "Altı SQL programında test edildi" diyordum. Oysa bu, SQLite üzerinde çalışan bir taklit katmanıydı ve gerçek PostgreSQL'de bazı çözümler hata veriyordu. Çözümleri düzelttim, metni de gerçeğe göre değiştirdim.</li>
-<li><b>Veri kurgusaldı ama fiziksel olarak da tutarsızdı.</b> Bisikletlerin %98,5'i önceki yolculuğunun bittiği istasyondan başlamıyordu, uçaklar üst üste uçuyordu. Sorgular çalıştığı için testler bunu görmedi; denetim buldu. <!--VERI--></li>
+<li><b>Veri kurgusaldı ama fiziksel olarak da tutarsızdı.</b> Bisikletlerin %98,5'i önceki yolculuğunun bittiği istasyondan başlamıyordu, aynı uçak aynı anda iki uçuşta görünüyordu. Sorgular çalıştığı için testler bunu görmedi; denetim buldu. Atamayı yeniden yaptırdım ve fiziksel tutarlılığı ayrı bir denetime bağladım. Bedeli de yazıyor: boş konumlandırma uçuşları yolcu uçuşlarının %11'i kadar, yani gerçekçilik sınırında.</li>
 </ul>
 
 <h2>Sınırlar</h2>
-<div class="note">Gerçek kullanıcı testi ve alan uzmanı onayı henüz yok. Süre tahminleri ölçüm değil, tahmin.</div>
+<div class="note">Denetimlerin hepsi otomatik testler ve yapay zekâ incelemeleriyle yapıldı. Gerçek kullanıcı testi ve alan uzmanı onayı henüz yok. Süre tahminleri ölçüm değil, tahmin.</div>
 <ul>
 <li>SQL Server, MySQL, Oracle ve BigQuery davranışı taklit katmanında; gerçek motorlarda denenmedi. PostgreSQL ayrıca gerçek motorda sınanıyor.</li>
 <li>Power BI vaka paketlerinin adımları gerçek Desktop ve Service üzerinde baştan sona uygulanmadı.</li>
