@@ -43,12 +43,13 @@ td.n{font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
 .note{padding:14px 16px;border:1px solid var(--line);border-left:4px solid var(--warn);border-radius:8px;background:var(--surface);margin:10px 0 14px}
 footer{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);font-size:.88rem;color:var(--muted)}
 @media (max-width:640px){.wrap{padding:0 16px 40px}.top{padding-top:32px}}
+.skip{position:absolute;left:-999px;top:8px;background:var(--ink);color:var(--bg);padding:8px 12px;border-radius:6px}.skip:focus{left:8px}
 </style>
 </head>
-<body>
+<body><a class="skip" href="#m">İçeriğe geç</a>
 <div class="wrap">
 <header><a class="brand" href="../"><img src="../favicon.svg" width="26" height="26" alt="">Kesit</a></header>
-<main>
+<main id="m">
 <div class="top">
 <span class="eyebrow">Vaka notu</span>
 <h1>Kendim için başlayan bir çalışma ürüne nasıl dönüştü?</h1>
@@ -82,7 +83,7 @@ footer{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);font-si
 <tr><td>Power BI</td><td>407 DAX alıştırması, 24 örnek rapor ve 5 vaka paketi denetlendi, sorun çıkmadı. Bu denetim gerçek Power BI ile değil, tarayıcıdaki benzetim motoruyla yapıldı.</td></tr>
 <tr><td>Arayüzden çözüm</td><td>Rastgele seçilen 96 SQL ve 97 Power BI alıştırması tarayıcıda çözüldü, başarısız olan yok. Denenen yanlış cevaplar da reddedildi.</td></tr>
 <tr><td>Veri tutarlılığı</td><td>Uçaklarda ışınlanma 2.362'den 0'a, bisikletlerde 114.509'dan 0'a indi.</td></tr>
-<tr><td>Kapsam</td><td>SQL 258 ders ve 1.620 alıştırma. Power BI 118 ders ve 937 alıştırma. Python 141 ders ve 3.034 alıştırma.</td></tr>
+<tr><td>Kapsam</td><td>SQL 271 ders ve 1.747 alıştırma. Power BI 134 ders ve 1.067 alıştırma. Python 144 ders ve 3.080 alıştırma.</td></tr>
 </table></div>
 
 <h2>Yanlış gidenler</h2>

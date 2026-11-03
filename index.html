@@ -63,12 +63,13 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:.86rem;col
 footer p{margin:0 0 8px;max-width:78ch}
 footer a{font-weight:600}
 @media (max-width:820px){.apps,.roles,.how{grid-template-columns:minmax(0,1fr)}.hero{padding:44px 0 36px}.wrap{padding:0 16px}}
+.skip{position:absolute;left:-999px;top:8px;z-index:99;background:var(--ink);color:var(--bg);padding:8px 12px;border-radius:6px}.skip:focus{left:8px}
 </style>
 </head>
-<body>
+<body><a class="skip" href="#m">İçeriğe geç</a>
 <div class="wrap">
 <header><div class="brand"><img src="favicon.svg" width="28" height="28" alt="">Kesit</div></header>
-<main>
+<main id="m">
 <div class="hero">
 <h1>Veri işinin üç temel aracı, Türkçe ve yaparak.</h1>
 <p>SQL, Power BI ve Python'ı kurulum ve hesap olmadan tarayıcında çalışarak öğren. Sıfırdan başla ya da yapmak istediğin işe göre ilerle.</p>
@@ -76,9 +77,9 @@ footer a{font-weight:600}
 <section aria-labelledby="ap">
 <h2 id="ap" hidden>Uygulamalar</h2>
 <div class="apps">
-<a class="app sql" href="/kesit-sql/" data-k="sql"><img class="shot" src="/kesit-sql/ekran/alistirma.png" alt="Kesit SQL alıştırma ekranı" width="1280" height="800" loading="lazy"><h3>Kesit <span>SQL</span></h3><p>Tarayıcıdaki gerçek veritabanında sorgu yaz. Altı SQL türünün yazımını karşılaştır.</p><div class="nums"><div><b>258</b><span>ders</span></div><div><b>1.620</b><span>alıştırma</span></div><div><b>540</b><span>pratik görevi</span></div></div><div class="prog"></div><span class="go">SQL'e başla →</span></a>
-<a class="app pbi" href="/kesit-powerbi/" data-k="pbi"><img class="shot" src="/kesit-powerbi/ekran/rapor.png" alt="Kesit Power BI örnek rapor ekranı" width="1280" height="800" loading="lazy"><h3>Kesit <span>Power BI</span></h3><p>Tarayıcıda DAX ölçüsü yaz, rapor mantığını öğren, vaka paketleriyle Desktop'ta uygula.</p><div class="nums"><div><b>118</b><span>ders</span></div><div><b>937</b><span>alıştırma</span></div><div><b>24</b><span>örnek rapor</span></div></div><div class="prog"></div><span class="go">Power BI'a başla →</span></a>
-<a class="app py" href="/kesit-python/" data-k="python"><img class="shot" src="/kesit-python/ekran/alistirma.png" alt="Kesit Python kod editörü ekranı" width="1280" height="800" loading="lazy"><h3>Kesit <span>Python</span></h3><p>Gerçek Python'ı tarayıcında çalıştır: temellerden pandas'a, otomasyondan yapay zekâya.</p><div class="nums"><div><b>141</b><span>ders</span></div><div><b>3.034</b><span>alıştırma</span></div><div><b>550</b><span>pratik görevi</span></div></div><div class="prog"></div><span class="go">Python'a başla →</span></a>
+<a class="app sql" href="/kesit-sql/" data-k="sql"><img class="shot" src="/kesit-sql/ekran/alistirma.png" alt="Kesit SQL alıştırma ekranı" width="1280" height="800" loading="lazy"><h3>Kesit <span>SQL</span></h3><p>Tarayıcıdaki gerçek veritabanında sorgu yaz. Altı SQL türünün yazımını karşılaştır.</p><div class="nums"><div><b>271</b><span>ders</span></div><div><b>1.747</b><span>alıştırma</span></div><div><b>562</b><span>pratik görevi</span></div></div><div class="prog"></div><span class="go">SQL'e başla →</span></a>
+<a class="app pbi" href="/kesit-powerbi/" data-k="pbi"><img class="shot" src="/kesit-powerbi/ekran/rapor.png" alt="Kesit Power BI örnek rapor ekranı" width="1280" height="800" loading="lazy"><h3>Kesit <span>Power BI</span></h3><p>Tarayıcıda DAX ölçüsü yaz, rapor mantığını öğren, vaka paketleriyle Desktop'ta uygula.</p><div class="nums"><div><b>134</b><span>ders</span></div><div><b>1.067</b><span>alıştırma</span></div><div><b>24</b><span>örnek rapor</span></div></div><div class="prog"></div><span class="go">Power BI'a başla →</span></a>
+<a class="app py" href="/kesit-python/" data-k="python"><img class="shot" src="/kesit-python/ekran/alistirma.png" alt="Kesit Python kod editörü ekranı" width="1280" height="800" loading="lazy"><h3>Kesit <span>Python</span></h3><p>Gerçek Python'ı tarayıcında çalıştır: temellerden pandas'a, otomasyondan yapay zekâya.</p><div class="nums"><div><b>144</b><span>ders</span></div><div><b>3.080</b><span>alıştırma</span></div><div><b>553</b><span>pratik görevi</span></div></div><div class="prog"></div><span class="go">Python'a başla →</span></a>
 </div>
 </section>
 <section aria-labelledby="ry">
