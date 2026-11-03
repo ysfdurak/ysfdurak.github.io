@@ -1,0 +1,454 @@
+{
+ "ozet": [
+  {
+   "siparis": 96183,
+   "gec": 6530,
+   "kotu": 12218,
+   "kotu_gec": 3981,
+   "puanli": 95540
+  }
+ ],
+ "dort_hucre": [
+  {
+   "gec": false,
+   "anket_once": false,
+   "n": 88943,
+   "kotu": 8198
+  },
+  {
+   "gec": false,
+   "anket_once": true,
+   "n": 220,
+   "kotu": 39
+  },
+  {
+   "gec": true,
+   "anket_once": false,
+   "n": 1629,
+   "kotu": 409
+  },
+  {
+   "gec": true,
+   "anket_once": true,
+   "n": 4748,
+   "kotu": 3572
+  }
+ ],
+ "gecikme_kova": [
+  {
+   "kova": "a. 15+ gün erken",
+   "n": 34509,
+   "kotu": 3100,
+   "anket_once": 75
+  },
+  {
+   "kova": "b. 8-14 gün erken",
+   "n": 36145,
+   "kotu": 3216,
+   "anket_once": 82
+  },
+  {
+   "kova": "c. 1-7 gün erken",
+   "n": 17229,
+   "kotu": 1762,
+   "anket_once": 55
+  },
+  {
+   "kova": "d. Tam günü",
+   "n": 1280,
+   "kotu": 159,
+   "anket_once": 8
+  },
+  {
+   "kova": "e. 1-3 gün geç",
+   "n": 1851,
+   "kotu": 595,
+   "anket_once": 386
+  },
+  {
+   "kova": "f. 4-7 gün geç",
+   "n": 1747,
+   "kotu": 1183,
+   "anket_once": 1584
+  },
+  {
+   "kova": "g. 8-14 gün geç",
+   "n": 1446,
+   "kotu": 1159,
+   "anket_once": 1445
+  },
+  {
+   "kova": "h. 15+ gün geç",
+   "n": 1333,
+   "kotu": 1044,
+   "anket_once": 1333
+  }
+ ],
+ "ay": [
+  {
+   "ay": "2017-01",
+   "n": 749,
+   "gec": 22,
+   "tasima_medyan": 7.15011574074074,
+   "satici_gec": 166
+  },
+  {
+   "ay": "2017-02",
+   "n": 1651,
+   "gec": 49,
+   "tasima_medyan": 7.3201273148148145,
+   "satici_gec": 287
+  },
+  {
+   "ay": "2017-03",
+   "n": 2545,
+   "gec": 116,
+   "tasima_medyan": 7.045821759259259,
+   "satici_gec": 172
+  },
+  {
+   "ay": "2017-04",
+   "n": 2303,
+   "gec": 151,
+   "tasima_medyan": 8.90013888888889,
+   "satici_gec": 168
+  },
+  {
+   "ay": "2017-05",
+   "n": 3544,
+   "gec": 106,
+   "tasima_medyan": 7.031903935185185,
+   "satici_gec": 258
+  },
+  {
+   "ay": "2017-06",
+   "n": 3134,
+   "gec": 95,
+   "tasima_medyan": 7.436284722222222,
+   "satici_gec": 249
+  },
+  {
+   "ay": "2017-07",
+   "n": 3861,
+   "gec": 108,
+   "tasima_medyan": 7.062627314814815,
+   "satici_gec": 297
+  },
+  {
+   "ay": "2017-08",
+   "n": 4191,
+   "gec": 122,
+   "tasima_medyan": 6.946122685185185,
+   "satici_gec": 284
+  },
+  {
+   "ay": "2017-09",
+   "n": 4149,
+   "gec": 181,
+   "tasima_medyan": 7.089942129629629,
+   "satici_gec": 298
+  },
+  {
+   "ay": "2017-10",
+   "n": 4478,
+   "gec": 187,
+   "tasima_medyan": 7.04761574074074,
+   "satici_gec": 352
+  },
+  {
+   "ay": "2017-11",
+   "n": 7288,
+   "gec": 904,
+   "tasima_medyan": 8.759988425925926,
+   "satici_gec": 938
+  },
+  {
+   "ay": "2017-12",
+   "n": 5513,
+   "gec": 411,
+   "tasima_medyan": 9.090474537037037,
+   "satici_gec": 599
+  },
+  {
+   "ay": "2018-01",
+   "n": 7069,
+   "gec": 403,
+   "tasima_medyan": 8.035972222222222,
+   "satici_gec": 717
+  },
+  {
+   "ay": "2018-02",
+   "n": 6555,
+   "gec": 926,
+   "tasima_medyan": 11.02357638888889,
+   "satici_gec": 802
+  },
+  {
+   "ay": "2018-03",
+   "n": 7003,
+   "gec": 1328,
+   "tasima_medyan": 9.880127314814814,
+   "satici_gec": 596
+  },
+  {
+   "ay": "2018-04",
+   "n": 6798,
+   "gec": 306,
+   "tasima_medyan": 6.910862268518518,
+   "satici_gec": 407
+  },
+  {
+   "ay": "2018-05",
+   "n": 6749,
+   "gec": 443,
+   "tasima_medyan": 6.517824074074074,
+   "satici_gec": 442
+  },
+  {
+   "ay": "2018-06",
+   "n": 6096,
+   "gec": 71,
+   "tasima_medyan": 5.850358796296296,
+   "satici_gec": 410
+  },
+  {
+   "ay": "2018-07",
+   "n": 6156,
+   "gec": 208,
+   "tasima_medyan": 5.300625,
+   "satici_gec": 551
+  },
+  {
+   "ay": "2018-08",
+   "n": 6351,
+   "gec": 393,
+   "tasima_medyan": 4.951238425925926,
+   "satici_gec": 577
+  }
+ ],
+ "eyalet": [
+  {
+   "alici_eyalet": "SP",
+   "n": 40386,
+   "gec": 1816,
+   "tasima_medyan": 4.418136574074074
+  },
+  {
+   "alici_eyalet": "RJ",
+   "n": 12310,
+   "gec": 1495,
+   "tasima_medyan": 8.380520833333334
+  },
+  {
+   "alici_eyalet": "MG",
+   "n": 11315,
+   "gec": 519,
+   "tasima_medyan": 7.196516203703704
+  },
+  {
+   "alici_eyalet": "BA",
+   "n": 3253,
+   "gec": 396,
+   "tasima_medyan": 13.833171296296296
+  },
+  {
+   "alici_eyalet": "RS",
+   "n": 5326,
+   "gec": 325,
+   "tasima_medyan": 10.01458912037037
+  },
+  {
+   "alici_eyalet": "SC",
+   "n": 3535,
+   "gec": 291,
+   "tasima_medyan": 9.67375
+  },
+  {
+   "alici_eyalet": "ES",
+   "n": 1992,
+   "gec": 214,
+   "tasima_medyan": 9.967476851851853
+  },
+  {
+   "alici_eyalet": "PR",
+   "n": 4903,
+   "gec": 199,
+   "tasima_medyan": 7.184155092592593
+  },
+  {
+   "alici_eyalet": "CE",
+   "n": 1273,
+   "gec": 176,
+   "tasima_medyan": 14.75576388888889
+  },
+  {
+   "alici_eyalet": "PE",
+   "n": 1587,
+   "gec": 153,
+   "tasima_medyan": 12.860891203703703
+  },
+  {
+   "alici_eyalet": "GO",
+   "n": 1950,
+   "gec": 128,
+   "tasima_medyan": 11.004288194444445
+  },
+  {
+   "alici_eyalet": "MA",
+   "n": 713,
+   "gec": 125,
+   "tasima_medyan": 15.68125
+  },
+  {
+   "alici_eyalet": "DF",
+   "n": 2074,
+   "gec": 118,
+   "tasima_medyan": 8.08708912037037
+  },
+  {
+   "alici_eyalet": "PA",
+   "n": 942,
+   "gec": 106,
+   "tasima_medyan": 17.297112268518518
+  },
+  {
+   "alici_eyalet": "AL",
+   "n": 396,
+   "gec": 85,
+   "tasima_medyan": 18.120028935185182
+  },
+  {
+   "alici_eyalet": "MS",
+   "n": 701,
+   "gec": 68,
+   "tasima_medyan": 11.063912037037037
+  },
+  {
+   "alici_eyalet": "PI",
+   "n": 475,
+   "gec": 66,
+   "tasima_medyan": 13.473622685185186
+  },
+  {
+   "alici_eyalet": "PB",
+   "n": 516,
+   "gec": 54,
+   "tasima_medyan": 14.119502314814815
+  },
+  {
+   "alici_eyalet": "MT",
+   "n": 885,
+   "gec": 53,
+   "tasima_medyan": 13.21224537037037
+  },
+  {
+   "alici_eyalet": "SE",
+   "n": 332,
+   "gec": 51,
+   "tasima_medyan": 14.216556712962962
+  },
+  {
+   "alici_eyalet": "RN",
+   "n": 470,
+   "gec": 44,
+   "tasima_medyan": 13.099953703703704
+  },
+  {
+   "alici_eyalet": "TO",
+   "n": 274,
+   "gec": 27,
+   "tasima_medyan": 13.116111111111111
+  },
+  {
+   "alici_eyalet": "RO",
+   "n": 243,
+   "gec": 7,
+   "tasima_medyan": 15.101481481481482
+  },
+  {
+   "alici_eyalet": "RR",
+   "n": 40,
+   "gec": 5,
+   "tasima_medyan": 22.90719328703704
+  },
+  {
+   "alici_eyalet": "AM",
+   "n": 145,
+   "gec": 4,
+   "tasima_medyan": 23.040613425925926
+  },
+  {
+   "alici_eyalet": "AC",
+   "n": 80,
+   "gec": 3,
+   "tasima_medyan": 15.135075231481482
+  },
+  {
+   "alici_eyalet": "AP",
+   "n": 67,
+   "gec": 2,
+   "tasima_medyan": 21.002708333333334
+  }
+ ],
+ "satici_etkisi": [
+  {
+   "satici_gec": false,
+   "n": 87613,
+   "gec": 4719
+  },
+  {
+   "satici_gec": true,
+   "n": 8570,
+   "gec": 1811
+  }
+ ],
+ "senaryo": [
+  {
+   "satici_zamaninda": 5721,
+   "yogun_ay_3_gun": 5761,
+   "rj_3_gun": 6233,
+   "soz_3_gun_kisa": 10832,
+   "soz_5_gun_kisa": 14477
+  }
+ ],
+ "kapsam_siparis": [
+  {
+   "order_status": "delivered",
+   "n": 96478
+  },
+  {
+   "order_status": "shipped",
+   "n": 1107
+  },
+  {
+   "order_status": "canceled",
+   "n": 625
+  },
+  {
+   "order_status": "unavailable",
+   "n": 609
+  },
+  {
+   "order_status": "invoiced",
+   "n": 314
+  },
+  {
+   "order_status": "processing",
+   "n": 301
+  },
+  {
+   "order_status": "created",
+   "n": 5
+  },
+  {
+   "order_status": "approved",
+   "n": 2
+  }
+ ],
+ "yogun_paylar": [
+  {
+   "yogun_siparis": 20846,
+   "yogun_gec": 3158
+  }
+ ]
+}

@@ -1,0 +1,41 @@
+{
+ "etki": {
+  "n": 94301,
+  "ham_puan": 53.7,
+  "kontrollu_puan": 52.5,
+  "kontrollu_se": 0.39,
+  "ayni_satici_puan": 53.2,
+  "ayni_satici_n": 82561,
+  "anket_sonra_gec": 25.0,
+  "anket_sonra_zamaninda": 8.7,
+  "anket_sonra_gec_n": 1626,
+  "anket_sonra_puan": 16.3
+ },
+ "uyari": [
+  {
+   "esik": 1.1,
+   "siparis_payi": 21.7,
+   "gec_uyarili": 7.5,
+   "gec_uyarisiz": 6.7
+  },
+  {
+   "esik": 1.2,
+   "siparis_payi": 12.2,
+   "gec_uyarili": 6.6,
+   "gec_uyarisiz": 6.9
+  },
+  {
+   "esik": 1.3,
+   "siparis_payi": 8.1,
+   "gec_uyarili": 5.4,
+   "gec_uyarisiz": 7.0
+  },
+  {
+   "esik": 1.5,
+   "siparis_payi": 4.3,
+   "gec_uyarili": 2.8,
+   "gec_uyarisiz": 7.0
+  }
+ ],
+ "capraz_kontrol": 34
+}
