@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Kesit vaka notu</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Kesit'in nasıl yapıldığı: sorun, kararlar, yapay zekâ kullanımı, ölçümler, yanlış gidenler ve sınırlar.">
+<meta name="theme-color" content="#F1F0EC">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../vendor/fonts.css">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:site_name" content="Kesit">
+<meta property="og:title" content="Kesit vaka notu: kararlar, ölçümler ve yanlış gidenler">
+<meta property="og:description" content="Üç Türkçe eğitim uygulamasının ürün sahibi gözüyle kısa hikâyesi.">
+<meta property="og:image" content="https://ysfdurak.github.io/og.png">
+<meta property="og:url" content="https://ysfdurak.github.io/vaka/">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+:root{--bg:#F1F0EC;--surface:#fff;--ink:#1B1A16;--muted:#625F55;--line:#DEDBD2;--link:#2A56B5;--warn:#8A6200;--f-d:'Bricolage Grotesque',system-ui,sans-serif;--f-b:'IBM Plex Sans',system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#12110D;--surface:#1B1A15;--ink:#EEEBE2;--muted:#A39F92;--line:#34312A;--link:#8FB3FF;--warn:#F2C94C}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.65 var(--f-b);-webkit-font-smoothing:antialiased}
+a{color:var(--link)}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px 56px}
+header{padding:28px 0 0}
+.brand{display:inline-flex;align-items:center;gap:10px;font:800 1.2rem var(--f-d);letter-spacing:-.02em;color:inherit;text-decoration:none}
+.top{padding:44px 0 30px}
+.eyebrow{font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font:800 clamp(2rem,5.5vw,3rem)/1.08 var(--f-d);letter-spacing:-.025em;margin:8px 0 14px;text-wrap:balance}
+.lead{font-size:1.1rem;color:var(--muted);margin:0}
+h2{font:800 1.35rem/1.25 var(--f-d);letter-spacing:-.015em;margin:38px 0 10px}
+p{margin:0 0 12px}
+ul{margin:0 0 12px;padding-left:20px}
+li{margin-bottom:7px}
+.tw{overflow-x:auto;margin:6px 0 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--line)}
+tr:last-child td{border-bottom:0}
+th{font-weight:600;color:var(--muted);font-size:.8rem}
+td.n{font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+.note{padding:14px 16px;border:1px solid var(--line);border-left:4px solid var(--warn);border-radius:8px;background:var(--surface);margin:10px 0 14px}
+footer{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);font-size:.88rem;color:var(--muted)}
+@media (max-width:640px){.wrap{padding:0 16px 40px}.top{padding-top:32px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><a class="brand" href="../"><img src="../favicon.svg" width="26" height="26" alt="">Kesit</a></header>
+<main>
+<div class="top">
+<span class="eyebrow">Vaka notu</span>
+<h1>Kendim için başlayan bir çalışma ürüne nasıl dönüştü?</h1>
+<p class="lead">Yusuf Durak. Kesit'in ürün sahibi olarak verdiğim kararlar, yapay zekâyla çalışma biçimim, yanlış gidenler ve hâlâ bilmediklerim.</p>
+</div>
+
+<h2>Sorun</h2>
+<p>SQL, Power BI ve Python'ı kendi işimde daha iyi kullanmak için çalışma uygulamaları yapmaya başladım. Sonra asıl boşluğu gördüm: Türkçe, kurulum istemeyen, yaparak öğreten ve bir işe göre sıralanmış kaynak bulmak zordu. Kapsamı bu boşluğa göre genişlettim.</p>
+
+<h2>Benim rolüm, yapay zekânın rolü</h2>
+<p>Kodu ve içeriğin büyük kısmını yapay zekâ (Claude) üretti. Bunu gizlemiyorum. Ben ürün sahibi olarak ne yapılacağına, neyin yeterince iyi olduğuna ve neyin yayına çıkmayacağına karar verdim: kapsam, roller, adlandırma, öncelik ve kabul. Bu yüzden her kodun satırını yazmış gibi değil, ürünün kararlarını savunan biri olarak konuşurum.</p>
+
+<h2>Öne çıkan kararlar</h2>
+<div class="tw"><table>
+<tr><th>Karar</th><th>Neden</th></tr>
+<tr><td>Üç ayrı uygulama, tek aile</td><td>Her biri farklı bir motor kullanıyor. Birleştirmek hem açılışı ağırlaştırır hem de birindeki hatayı diğerine taşır. Ortak adlandırma ve aile bağlantıları tek ürün hissi veriyor.</td></tr>
+<tr><td>Ticari model yerine ücretsiz portföy</td><td>Ticari seçenekleri değerlendirdim, portföy olarak tutmayı seçtim. Sonuç: ücret ve hesap yok, kişisel veri toplanmıyor, ilerleme kullanıcının tarayıcısında kalıyor.</td></tr>
+<tr><td>Adı değiştirmek</td><td>"Patika" adı var olan bir eğitim platformuyla çakışıyordu. Kesit'e geçtim. Gerçek bir bankaya benzeyen örnek şirket adını da değiştirdim.</td></tr>
+<tr><td>Yayını geciktirmek</td><td>"Bir hafta geç çıksın, ürün iyi çıksın" dedim. Denetimlerden sonra öncelik yeni içerik değil; hatalar, ders sırası ve yanıltıcı adlar oldu.</td></tr>
+<tr><td>Sektörün dilini kullanmak</td><td>Türkçe çeviri doğru olsa da işte Measure, Agile ya da UAT denir. Bir öğrenci mülakatta ve ilanda karşılaşacağı adı öğrenmeli. Bu yüzden örneğin "Ölçü Laboratuvarı" Measure Lab oldu; Power BI'da rapor ile dashboard ayrımına uyuldu.</td></tr>
+<tr><td>BT iş analisti yolu</td><td>Yollara baktığımda eksik gördüm. Mevcut dersleri yeniden sıralamak daha hızlıydı; ben çekirdek işi (gereksinim, kabul kriteri, UAT) tek senaryoyla anlatan yeni dersleri içeren seçeneği seçtim.</td></tr>
+</table></div>
+
+<h2>Ölçtüklerim</h2>
+<p>Henüz bir kullanım başarısı ölçmedim. Ölçebildiğim şey, ürünün söylediğini yapıp yapmadığı:</p>
+<div class="tw"><table>
+<tr><th>Ölçüm</th><th>Sonuç</th></tr>
+<!--OLCUM-->
+</table></div>
+
+<h2>Yanlış gidenler</h2>
+<ul>
+<li><b>Sayı, kalite demek değildi.</b> Denetim, Python kurulum dersindeki 11 kod görevinin hepsinin metin ayrıştırma olduğunu gösterdi; dersin konusuyla ilgileri yoktu. Alıştırma sayısı büyürken bu tür dolgu görünmez kalmıştı.</li>
+<li><b>Düzeltme yeni hata getirdi.</b> Ad değişikliği iki sınav sorusunun doğru cevabını yok etti. Terimlere İngilizce ekleyen özellik "istemci (prompt)" gibi yanlış eşleşmeler üretti. Testler ikisini de görmedi, bağımsız inceleme buldu. Şimdi ikisi için ayrı denetim var.</li>
+<li><b>İddiam fazla büyüktü.</b> "Altı SQL programında test edildi" diyordum. Oysa bu, SQLite üzerinde çalışan bir taklit katmanıydı ve gerçek PostgreSQL'de bazı çözümler hata veriyordu. Çözümleri düzelttim, metni de gerçeğe göre değiştirdim.</li>
+<li><b>Veri kurgusaldı ama fiziksel olarak da tutarsızdı.</b> Bisikletlerin %98,5'i önceki yolculuğunun bittiği istasyondan başlamıyordu, uçaklar üst üste uçuyordu. Sorgular çalıştığı için testler bunu görmedi; denetim buldu. <!--VERI--></li>
+</ul>
+
+<h2>Sınırlar</h2>
+<div class="note">Gerçek kullanıcı testi ve alan uzmanı onayı henüz yok. Süre tahminleri ölçüm değil, tahmin.</div>
+<ul>
+<li>SQL Server, MySQL, Oracle ve BigQuery davranışı taklit katmanında; gerçek motorlarda denenmedi. PostgreSQL ayrıca gerçek motorda sınanıyor.</li>
+<li>Power BI vaka paketlerinin adımları gerçek Desktop ve Service üzerinde baştan sona uygulanmadı.</li>
+<li>Bu bir okul ya da sertifika değil; verilen belge kendi beyanına dayanır.</li>
+</ul>
+
+<h2>Sırada ne var</h2>
+<p>Yeni özellik değil, kanıt: yeni başlayanlar ve alan uzmanlarıyla küçük bir pilot. Nerede bıraktıklarını ve gerçek süreleri görmeden sonraki adımı seçmeyeceğim.</p>
+</main>
+<footer><a href="../">Ana sayfa</a> · <a href="https://www.linkedin.com/in/yusuf-durak" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://github.com/ysfdurak" target="_blank" rel="noopener">GitHub</a></footer>
+</div>
+</body>
+</html>
