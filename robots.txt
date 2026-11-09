@@ -1,5 +1,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ysfdurak.github.io/dilkusu/sitemap.xml
+Sitemap: https://ysfdurak.github.io/ingilizce-ogrenme-atolyesi/sitemap.xml
 Sitemap: https://ysfdurak.github.io/sitemap.xml
