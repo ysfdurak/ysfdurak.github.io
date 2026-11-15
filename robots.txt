@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ingilizce.ysfdurak.com/sitemap.xml
 Sitemap: https://ysfdurak.github.io/sitemap.xml
