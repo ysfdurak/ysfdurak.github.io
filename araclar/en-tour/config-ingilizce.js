@@ -32,8 +32,8 @@
     accent: '#ffcf6b',
     intro:
       'İngilizce Atölyesi teaches English to Turkish speakers from A1 to C2 and prepares them for Turkey’s national English exams (YDS, e-YDS, YÖKDİL). Explanations are in Turkish on purpose — they contrast English with Turkish — so the interface stays Turkish. This guide explains each section.',
-    glossSelector: 'nav.tb button, .hbt > b, .gal, main .big, .scard b, main .tabs button, main .seg button',
-    blockGloss: '.hbt > b, main .big, .gal',
+    glossSelector: 'nav.tb button, .hbt > b, .gal, main .big, .scard b, main .tabs button, main .seg button, main h2, main h3',
+    blockGloss: '.hbt > b, main .big, .gal, main h2, main h3',
     gloss: {
       Bugün: 'Today',
       Üniteler: 'Units',
@@ -49,6 +49,7 @@
       Rozetler: 'Badges',
       Ayarlar: 'Settings',
       'İngilizce karnem': 'My English report card',
+      'Bugünkü planın': 'Your plan for today',
       'Merhaba! Ben Mavi.': 'Hi! I’m Mavi (the guide character).',
       ...Object.fromEntries(
         Object.entries({
@@ -71,7 +72,7 @@
       home: {
         t: 'Today',
         p: 'The daily screen: one “continue” button, today’s lesson and the review queue. Mavi, the guide character, suggests the next step. Progress is stored in the browser — no account needed.',
-        try: 'Press “Seviye seç” (Choose a level) or start the first word lesson to see how a lesson works.',
+        try: 'Press “Derse başla” (Start the lesson) to see how a vocabulary lesson works, or open “Keşfet” (Explore) to see every section.',
       },
       uniteler: {
         t: 'Units',
