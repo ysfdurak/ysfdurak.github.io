@@ -121,5 +121,6 @@ footer a{font-weight:600}
 <script>
 document.querySelectorAll('.app').forEach(function(a){try{var o=JSON.parse(localStorage.getItem('kesit.ozet.'+a.dataset.k)||'null');if(o&&o.bitti>0&&o.toplam>0){a.querySelector('.prog').textContent=o.bitti+' / '+o.toplam+' ders tamam';a.querySelector('.go').textContent='Kaldığın yerden devam et →'}}catch(e){}});
 </script>
+<script src="/en-tour.js" defer></script>
 </body>
 </html>
