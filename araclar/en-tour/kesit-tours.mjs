@@ -294,7 +294,7 @@ const SEL = 'nav button, aside button, aside a[data-page], .side a[data-page], h
 
 function file(id, a) {
   const guide = a.route ? a.guide : { ...COMMON_GUIDE, ...a.guide };
-  return `/* İngilizce tanıtım turu (?lang=en ile açılır, ?lang=tr ile kapanır; seçim bütün Kesit uygulamalarında ortaktır).
+  return `/* İngilizce tanıtım turu (?lang=en ile açılır, ?lang=tr ile kapanır; aynı sekmede bütün Kesit uygulamalarında sürer).
  * Kesit Türkçe veri eğitimidir ve Türkçe kalır. Tur, İngilizce okuyan ziyaretçiye her ekranın ne işe yaradığını anlatan
  * bir panel ve menü/başlıkların altında küçük İngilizce karşılıklar ekler. Uygulamaya özel içerik CONFIG'tedir; altındaki
  * motor bütün Kesit uygulamalarında ve İngilizce Atölyesi'nde aynıdır. Bu dosya ana sayfa deposundaki

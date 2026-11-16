@@ -1,13 +1,16 @@
   /* ---------- Tur motoru (bütün uygulamalarda aynı; içerik yukarıdaki CONFIG'tedir) ---------- */
   const C = CONFIG;
+  // Tur yalnızca bu sekmede açık kalır (sessionStorage): ?lang=en ile açılır, aynı sekmede gezerken sürer,
+  // yeni bir ziyarette uygulama yine Türkçe açılır. Eski sürüm seçimi kalıcı tuttuğu için o kayıt silinir.
+  let on = false;
   try {
+    localStorage.removeItem(C.key);
     const q = new URLSearchParams(location.search).get('lang');
-    if (q === 'en') localStorage.setItem(C.key, 'en');
-    if (q === 'tr') localStorage.removeItem(C.key);
-    if (localStorage.getItem(C.key) !== 'en') return;
-  } catch {
-    return;
-  }
+    if (q === 'en') sessionStorage.setItem(C.key, 'en');
+    if (q === 'tr') sessionStorage.removeItem(C.key);
+    on = sessionStorage.getItem(C.key) === 'en';
+  } catch {}
+  if (!on) return;
   root.EN_TOUR = true;
   let clicked = null; // URL'si değişmeyen uygulamalarda son tıklanan bölüm
   const norm = s => (s || '').replace(/\s+/g, ' ').trim();
