@@ -66,6 +66,14 @@ footer p{margin:0 0 8px;max-width:78ch}
 footer a{font-weight:600}
 @media (max-width:820px){.apps,.roles,.how{grid-template-columns:minmax(0,1fr)}.hero{padding:44px 0 36px}.wrap{padding:0 16px}}
 .skip{position:absolute;left:-999px;top:8px;z-index:99;background:var(--ink);color:var(--bg);padding:8px 12px;border-radius:6px}.skip:focus{left:8px}
+.case{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:20px;align-items:center;padding:22px;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.case ol{list-style:none;margin:0;padding:0;display:grid;gap:8px;counter-reset:c}
+.case li{counter-increment:c;display:flex;gap:10px;align-items:baseline;padding:8px 12px;border-radius:8px;background:var(--surface-2);border-left:4px solid var(--c)}
+.case li::before{content:counter(c);font:800 1rem var(--f-d);color:var(--t)}
+.case li a{font-weight:600;text-decoration:none}.case li a:hover{text-decoration:underline}
+.case li span{color:var(--muted);font-size:.88rem}.case li em{font-style:normal;color:var(--st-t);font-weight:600;font-size:.82rem;margin-left:auto}
+.case .cta{display:inline-block;margin-top:12px;padding:10px 16px;border-radius:8px;background:var(--ink);color:var(--bg);font-weight:600;text-decoration:none}
+@media (max-width:820px){.case{grid-template-columns:minmax(0,1fr)}}
 </style>
 </head>
 <body><a class="skip" href="#m">İçeriğe geç</a>
@@ -84,6 +92,16 @@ footer a{font-weight:600}
 <a class="app py" href="/kesit-python/" data-k="python"><img class="shot" src="/kesit-python/ekran/alistirma.png" alt="Kesit Python kod editörü ekranı" width="1280" height="800" loading="lazy"><h3>Kesit <span>Python</span></h3><p>Gerçek Python'ı tarayıcında çalıştır: temellerden pandas'a, otomasyondan yapay zekâya.</p><div class="nums"><div><b>156</b><span>ders</span></div><div><b>3.240</b><span>alıştırma</span></div><div><b>562</b><span>pratik görevi</span></div></div><div class="prog"></div><span class="go">Python'a başla →</span></a>
 <a class="app st" href="/kesit-istatistik/" data-k="istatistik"><img class="shot" src="/kesit-istatistik/ekran/vaka.png" alt="Kesit İstatistik vaka ekranı" width="1366" height="860" loading="lazy"><h3>Kesit <span>İstatistik</span></h3><p>Formülden önce veriyi gör: testler, regresyon, deney ve kalite. Aynı Kesit verileriyle SQL, Python ve DAX kodlu vakalar.</p><div class="nums"><div><b>120</b><span>ders</span></div><div><b>13</b><span>vaka</span></div><div><b>33</b><span>soru türü</span></div></div><div class="prog"></div><span class="go">İstatistiğe başla →</span></a>
 </div>
+</section>
+<section id="vaka" aria-labelledby="vk">
+<h2 id="vk">Bir depo vakasını baştan sona çöz</h2>
+<p class="lead">Dört uygulama tek bir iş sorusunda birleşir. Anadolu Market Gebze deposunda raf düzeni değişti: toplama süresi kısaldı mı, kısaldıysa yeni düzeni diğer depolara yaymaya yeter mi? Her adım öncekinin beklenen çıktısıyla başlar ve sonrakini açar.</p>
+<div class="case"><ol>
+<li style="--c:var(--sql);--t:var(--sql-t)"><a href="/kesit-sql/vaka/depo/">SQL</a><span>Ham el terminali kayıtlarını temizle ve özetle</span><em data-v="sql"></em></li>
+<li style="--c:var(--py);--t:var(--py-t)"><a href="/kesit-python/vaka/depo/">Python</a><span>Temizliği ve karşılaştırmanın adilliğini denetle</span><em data-v="python"></em></li>
+<li style="--c:var(--pbi);--t:var(--pbi-t)"><a href="/kesit-powerbi/vaka/depo/">Power BI</a><span>DAX ölçüleriyle kazancı panoda göster</span><em data-v="pbi"></em></li>
+<li style="--c:var(--st);--t:var(--st-t)"><a href="/kesit-istatistik/vaka/depo/">İstatistik</a><span>İstatistiksel fark var, ama operasyonel olarak yeterli mi?</span><em data-v="istatistik"></em></li>
+</ol><div><p style="margin:0">Yaklaşık 40 dakika. Gerçek motorlar tarayıcıda çalışır: SQLite, Python (pandas), Kesit DAX motoru ve Kesit İstatistik. Beklenen sonuçlar ayrıca SQLite, pandas ve SciPy ile hesaplanıp karşılaştırıldı.</p><a class="cta" id="vakaGo" href="/kesit-sql/vaka/depo/">Vakaya başla →</a></div></div>
 </section>
 <section aria-labelledby="ry">
 <h2 id="ry">Hangi işi yapmak istiyorsun?</h2>
@@ -122,5 +140,6 @@ footer a{font-weight:600}
 document.querySelectorAll('.app').forEach(function(a){try{var o=JSON.parse(localStorage.getItem('kesit.ozet.'+a.dataset.k)||'null');if(o&&o.bitti>0&&o.toplam>0){a.querySelector('.prog').textContent=o.bitti+' / '+o.toplam+' ders tamam';a.querySelector('.go').textContent='Kaldığın yerden devam et →'}}catch(e){}});
 </script>
 <script src="/en-tour.js" defer></script>
+<script>try{var vk=JSON.parse(localStorage.getItem('kesit.vaka.depo')||'{}'),u={sql:'/kesit-sql/vaka/depo/',python:'/kesit-python/vaka/depo/',pbi:'/kesit-powerbi/vaka/depo/',istatistik:'/kesit-istatistik/vaka/depo/'},n=0,nx=null;['sql','python','pbi','istatistik'].forEach(function(k){if(vk[k]&&vk[k].tamam){n++;document.querySelector('[data-v="'+k+'"]').textContent='✓ çözüldü'}else if(!nx)nx=k});if(n){var g=document.getElementById('vakaGo');g.textContent=n===4?'Vaka tamamlandı · yeniden çöz →':'Kaldığın yerden devam et ('+n+'/4) →';if(nx)g.href=u[nx]}}catch(e){}</script>
 </body>
 </html>

@@ -7,6 +7,8 @@ SQL, Power BI, Python ve istatistiği Türkçe, kurulum ve hesap olmadan tarayı
 - [Kesit Python](https://github.com/ysfdurak/kesit-python)
 - [Kesit İstatistik](https://github.com/ysfdurak/kesit-istatistik)
 
+**Uçtan uca vaka:** ana sayfadaki "Bir depo vakasını baştan sona çöz" bölümü dört uygulamayı tek bir depo sorusunda birleştirir (SQL → Python → Power BI → İstatistik). Veri, beklenen sonuçlar ve sayfa üreteci: [vaka/depo-kaynak](vaka/depo-kaynak/README.md).
+
 Tek sayfalık statik site; derleme adımı yoktur. Yazı tipleri SIL Open Font License ile dağıtılır (`vendor/fonts`).
 
 ## Lisans
