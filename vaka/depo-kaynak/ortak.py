@@ -124,7 +124,7 @@ def sayfa(adim, baslik, aciklama, govde, betik, ek_bas=""):
         f"<b>{a}</b>{g}<span class=\"durum ok\"></span></a></li>"
         for k, a, g, y in ADIMLAR
     )
-    return f"""<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    return f"""<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://cdn.jsdelivr.net; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{i + 1}. adım · {baslik} | Depo vakası | Kesit</title>
 <meta name="description" content="{aciklama}">
 <link rel="canonical" href="https://ysfdurak.github.io{yol}">
