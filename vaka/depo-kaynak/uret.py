@@ -178,6 +178,50 @@ istat = {
 }
 assert istat["karar"] != "başka", istat
 
+# ---------- 4b. İkinci örnek: aynı kazanç, farklı vardiya dağılımı (dış inceleme, Kasım 2026) ----------
+# İzmir deposu, aynı raf değişikliği. Düzenin gerçek etkisi yok (iki dönemde taban aynı); gece vardiyası 6 sn yavaş.
+# Ekim'de gece payı %45'ten %25'e düştü. Toplam ortalama yine ~1,2 sn düşer; ama vardiya içinde fark yoktur.
+# Öğrenci "ortalama süre düştü" ile "raf değişikliği düşüşe yol açtı" arasındaki farkı bu veride açıklar.
+R2 = random.Random(20261124)
+GECE2 = 6.5
+PAY2 = {"eski": 0.45, "yeni": 0.25}
+N2 = 1200
+ornek2 = []
+sid2 = 500000
+for duzen in ("eski", "yeni"):
+    ng = round(N2 * PAY2[duzen])
+    for i in range(N2):
+        v = "Gece" if i < ng else "Gündüz"
+        sid2 += 1
+        m = 42.0 + (GECE2 if v == "Gece" else 0.0)
+        ornek2.append({"satir_id": sid2, "vardiya": v, "duzen": duzen, "sure_sn": round(R2.gammavariate(11.0, m / 11.0), 1)})
+d2 = pd.DataFrame(ornek2)
+e2, y2 = d2.loc[d2.duzen == "eski", "sure_sn"], d2.loc[d2.duzen == "yeni", "sure_sn"]
+t2 = stats.ttest_ind(e2, y2, equal_var=False)
+ci2 = t2.confidence_interval(0.95)
+katman = {}
+for v in ("Gündüz", "Gece"):
+    ee, yy = d2[(d2.duzen == "eski") & (d2.vardiya == v)].sure_sn, d2[(d2.duzen == "yeni") & (d2.vardiya == v)].sure_sn
+    tv = stats.ttest_ind(ee, yy, equal_var=False)
+    cv = tv.confidence_interval(0.95)
+    katman[v] = {"n_eski": int(len(ee)), "n_yeni": int(len(yy)), "eski": float(ee.mean()), "yeni": float(yy.mean()),
+                 "fark": float(ee.mean() - yy.mean()), "p": float(tv.pvalue), "alt": float(cv.low), "ust": float(cv.high)}
+# Vardiya karışımı sabit tutulmuş fark: iki dönemin ortalama vardiya payıyla ağırlıklı vardiya içi farklar
+agirlik = {v: float((d2.vardiya == v).mean()) for v in ("Gündüz", "Gece")}
+duzeltilmis = sum(agirlik[v] * katman[v]["fark"] for v in agirlik)
+istat2 = {
+    "depo": "İzmir",
+    "eski": float(e2.mean()), "yeni": float(y2.mean()),
+    "fark": float(e2.mean() - y2.mean()), "t": float(t2.statistic), "df": float(t2.df), "p": float(t2.pvalue),
+    "alt": float(ci2.low), "ust": float(ci2.high),
+    "gece_payi": {k: float((d2[d2.duzen == k].vardiya == "Gece").mean()) for k in ("eski", "yeni")},
+    "katman": katman, "agirlik": agirlik, "duzeltilmis": float(duzeltilmis),
+    "karisim_etkisi": float((e2.mean() - y2.mean()) - duzeltilmis),
+}
+assert istat2["p"] < 0.05 and abs(istat2["fark"] - istat["fark"]) < 0.4, istat2  # aynı görünen kazanç
+assert all(k["alt"] < 0 < k["ust"] for k in katman.values()), katman  # vardiya içinde fark yok
+d2.to_csv(OUT / "ornek2_izmir.csv", index=False)
+
 beklenen = {
     "sql": {"temiz": SQL_TEMIZ, "ozet": SQL_OZET, "ozet_sonuc": ozet_sql, "eleme": eleme},
     "python": {
@@ -188,9 +232,10 @@ beklenen = {
     },
     "powerbi": {"olcu": olcu, "bolge": bolge_kazanc},
     "istatistik": istat,
+    "istatistik2": istat2,
 }
 (OUT / "beklenen.json").write_text(json.dumps(beklenen, ensure_ascii=False, indent=1), encoding="utf-8")
-print(json.dumps({"eleme": eleme, "ozet": ozet_sql, "olcu": olcu, "istat": istat}, ensure_ascii=False, indent=1))
+print(json.dumps({"eleme": eleme, "ozet": ozet_sql, "olcu": olcu, "istat": istat, "istat2": istat2}, ensure_ascii=False, indent=1))
 print(pay)
 print(vardiya_ort)
 print(grup)

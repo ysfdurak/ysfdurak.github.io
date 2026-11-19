@@ -16,6 +16,9 @@ B = json.loads((K / "beklenen.json").read_text(encoding="utf-8"))
 HAM = (K / "toplama_ham.json").read_text(encoding="utf-8")
 CSV = (K / "toplama_temiz.csv").read_text(encoding="utf-8")
 SQL, PY, PBI, ST = B["sql"], B["python"], B["powerbi"], B["istatistik"]
+ST2 = B["istatistik2"]  # ikinci örnek: aynı kazanç, farklı vardiya dağılımı
+CSV2 = (K / "ornek2_izmir.csv").read_text(encoding="utf-8")
+E2, Y2 = ST2["eski"], ST2["yeni"]
 J = lambda o: json.dumps(o, ensure_ascii=False, separators=(",", ":"))
 
 
@@ -387,6 +390,26 @@ st_govde = f"""<p class="vk-l">Pano yeni düzenin satır başına {tr(OL["Kazanc
 <p><b>Örnek karar metni:</b> “Ekim'de toplama süresi satır başına ortalama {tr(ST["fark"], 2)} sn kısaldı (%95 GA {tr(ST["alt"], 2)}–{tr(ST["ust"], 2)} sn). Aralığın tamamı 4 sn'lik yayma eşiğinin altında; yeni düzeni diğer depolara yaymak için yeterli değil. Gebze'de düzen kalsın; kazancın düzenden geldiğini ayırmak için benzer vardiyalarda, eski düzende kalan bir bölgeyle aynı dönemde karşılaştırma yapılsın.”</p>
 <p class="vk-not">p değeri ile etki büyüklüğünü ayrı değerlendirme ilkesi için: <a href="https://doi.org/10.1080/00031305.2016.1154108" rel="noopener">Amerikan İstatistik Derneği, p değerleri bildirgesi (2016)</a>.</p>
 </div>
+</section>
+<section class="vk-k" aria-labelledby="ornek2"><h2 id="ornek2">İkinci örnek: İzmir deposu, aynı görünen kazanç</h2>
+<p>İzmir deposunda da Ekim'de aynı raf değişikliği yapıldı. Toplam ortalama yine düştü: eski {tr(E2)} sn, yeni {tr(Y2)} sn, fark <b>{tr(ST2["fark"], 2)} sn</b> (p = {tr(ST2["p"], 3)}, %95 GA {tr(ST2["alt"], 2)}–{tr(ST2["ust"], 2)} sn). Gebze'ye çok benziyor. Bir farkla: Ekim'de gece vardiyasının payı değişti ve gece vardiyasında satır başına süre daha uzun.</p>
+<div class="vk-tw"><table><thead><tr><th>vardiya payı</th><th class="n">Eylül (eski)</th><th class="n">Ekim (yeni)</th></tr></thead><tbody><tr><td>Gündüz</td><td class="n">%{tr((1 - ST2["gece_payi"]["eski"]) * 100, 0)}</td><td class="n">%{tr((1 - ST2["gece_payi"]["yeni"]) * 100, 0)}</td></tr><tr><td>Gece</td><td class="n">%{tr(ST2["gece_payi"]["eski"] * 100, 0)}</td><td class="n">%{tr(ST2["gece_payi"]["yeni"] * 100, 0)}</td></tr></tbody></table></div>
+<p><b>Görev:</b> “Ortalama süre düştü” ile “raf değişikliği düşüşe yol açtı” aynı cümle değil. Farkı vardiya içinde karşılaştır, sonra bu veride hangisini söyleyebileceğini yaz.</p>
+<div class="vk-btn"><button class="p" id="katmanBtn">Vardiya içinde karşılaştır</button></div>
+<div id="katman" hidden><div class="vk-tw"><table><thead><tr><th>vardiya</th><th class="n">eski</th><th class="n">yeni</th><th class="n">fark</th><th class="n">%95 GA</th><th class="n">p</th></tr></thead><tbody id="katmanSat"></tbody></table></div>
+<div class="vk-kart" id="katmanKart"></div><ul class="vk-chk" id="katmanKontrol" aria-label="Denetim"></ul></div>
+<label for="metin2" class="vk-not">İzmir için açıklaman</label>
+<textarea id="metin2" class="vk-ed" style="min-height:110px;font-family:var(--f-b);font-size:1rem" placeholder="Örn. İzmir'de ortalama süre … sn düştü; ama vardiya içinde …"></textarea>
+<div class="vk-btn"><button class="p" id="kaydet2" disabled>Kaydet ve uzman değerlendirmesini aç</button><span class="vk-not" id="metin2Not" style="align-self:center">En az 60 karakter yaz.</span></div>
+<div id="uzman2" hidden>
+<h3>Metnin iki ifadeyi ayırıyor mu?</h3><ul class="vk-chk" id="ozdeg2" aria-label="Öz değerlendirme"></ul>
+<p class="vk-not">İşaretler yalnızca metindeki sözcüklere bakar; puan değildir.</p>
+<h3>Uzman değerlendirmesi</h3>
+<p><b>“Ortalama süre düştü”: doğru.</b> Toplamda {tr(ST2["fark"], 2)} sn düşüş var ve p = {tr(ST2["p"], 3)}; bu bir gözlem.</p>
+<p><b>“Raf değişikliği düşüşe yol açtı”: bu veri desteklemiyor.</b> Vardiya içinde fark yok denecek kadar küçük: gündüz {tr(ST2["katman"]["Gündüz"]["fark"], 2)} sn (%95 GA {tr(ST2["katman"]["Gündüz"]["alt"], 2)}–{tr(ST2["katman"]["Gündüz"]["ust"], 2)}), gece {tr(ST2["katman"]["Gece"]["fark"], 2)} sn (%95 GA {tr(ST2["katman"]["Gece"]["alt"], 2)}–{tr(ST2["katman"]["Gece"]["ust"], 2)}); ikisi de sıfırı içeriyor. Vardiya karışımı sabit tutulunca fark {tr(ST2["duzeltilmis"], 2)} sn. Toplam düşüşün yaklaşık {tr(ST2["karisim_etkisi"], 2)} sn'si yavaş gece vardiyasının payının %{tr(ST2["gece_payi"]["eski"] * 100, 0)}'ten %{tr(ST2["gece_payi"]["yeni"] * 100, 0)}'e inmesinden geliyor (karışım etkisi). Toplam ortalama, grupların payı değiştiğinde grupların hiçbiri değişmeden de düşebilir.</p>
+<p><b>Gebze ile farkı:</b> Gebze'de vardiya payları iki dönemde aynıydı ve fark iki vardiyada da aynı yöndeydi; orada vardiya açıklaması zayıftı. İzmir'de güçlü. Aynı t-testi sonucu iki depoda farklı karara götürür; karar testten değil, karşılaştırmanın adil olup olmadığından gelir.</p>
+<p><b>Örnek metin:</b> “İzmir'de ortalama toplama süresi {tr(ST2["fark"], 2)} sn düştü, ama bu düşüş raf düzeninden değil vardiya karışımından geliyor: Ekim'de gece payı %{tr(ST2["gece_payi"]["eski"] * 100, 0)}'ten %{tr(ST2["gece_payi"]["yeni"] * 100, 0)}'e indi ve aynı vardiya içinde eski ile yeni düzen arasında fark yok. Bu veriyle düzenin işe yaradığı söylenemez; aynı vardiyalarda önce–sonra ölçüm gerekir.”</p>
+</div>
 <div class="vk-son"><span class="vk-not" id="bitis">Dört adımı da çözünce vaka tamamlanır.</span><a class="vk-go" href="/#vaka">Vakayı bitir, Kesit'e dön →</a></div></section>"""
 st_betik = (
     "const CSV="
@@ -395,6 +418,10 @@ st_betik = (
     + J(ST)
     + ";const BEK_PBI="
     + J(OL)
+    + ";const CSV2="
+    + J(CSV2)
+    + ";const BEK2="
+    + J(ST2)
     + r""";
 const $=s=>document.querySelector(s), dur=t=>$('#dur').textContent=t;
 let eski=[],yeni=[];
@@ -436,6 +463,24 @@ function uzmanAc(){const t=metin.value.toLocaleLowerCase('tr-TR'),M=[[/aral|güv
   $('#ozdeg').innerHTML=M.map(([re,ad])=>{const v=re.test(t);return '<li class="'+(v?'ok':'no')+'">'+ad+(v?'':' : metninde göremedim')+'</li>';}).join('');$('#uzman').hidden=false;}
 kaydet.onclick=()=>{const s=vkOku();s.v=1;s.istatistik=Object.assign({},s.istatistik,{metin:metin.value.trim()});try{localStorage.setItem(VK_KEY,JSON.stringify(s))}catch(e){}uzmanAc();$('#uzman').scrollIntoView({behavior:'smooth',block:'start'});};
 if(onceki&&onceki.length>=60)uzmanAc();
+// İkinci örnek (İzmir): vardiya içinde Welch farkı ve vardiya karışımı sabit tutulmuş fark; SciPy değerleriyle denetlenir.
+function katmanla(){if(!window.AnalysisEngine){dur('Motor daha yüklenmedi.');return;}const v=vkCsvOku(CSV2),iV=v.cols.indexOf('vardiya'),iD=v.cols.indexOf('duzen'),iS=v.cols.indexOf('sure_sn');
+  const al=(d,va)=>v.rows.filter(r=>r[iD]===d&&(!va||r[iV]===va)).map(r=>+r[iS]),sat=[],L=[];let duz=0;
+  for(const va of ['Gündüz','Gece']){const r=welch(al('eski',va),al('yeni',va),.95),b=BEK2.katman[va],w=BEK2.agirlik[va];duz+=w*r.d;
+    sat.push('<tr><td>'+va+'</td><td class="n">'+vkSay(ort(al('eski',va)),2)+'</td><td class="n">'+vkSay(ort(al('yeni',va)),2)+'</td><td class="n">'+vkSay(r.d,2)+'</td><td class="n">'+vkSay(r.alt,2)+' – '+vkSay(r.ust,2)+'</td><td class="n">'+vkSay(r.p,3)+'</td></tr>');
+    L.push([Math.abs(r.d-b.fark)<1e-9&&Math.abs(r.p-b.p)<1e-6&&Math.abs(r.ust-b.ust)<1e-6,va+' vardiyası SciPy ile aynı']);}
+  const top=welch(al('eski'),al('yeni'),.95);L.push([Math.abs(duz-BEK2.duzeltilmis)<1e-9,'Karışımı sabit fark SciPy/pandas ile aynı']);
+  $('#katmanSat').innerHTML=sat.join('');
+  $('#katmanKart').innerHTML=[['Toplam fark',vkSay(top.d,2)+' sn'],['Vardiya karışımı sabit',vkSay(duz,2)+' sn'],['Karışımdan gelen',vkSay(top.d-duz,2)+' sn']].map(([a,b])=>'<div><span>'+a+'</span><b>'+b+'</b></div>').join('');
+  $('#katmanKontrol').innerHTML=L.map(([c,t])=>'<li class="'+(c?'ok':'no')+'">'+vkEsc(t)+'</li>').join('');$('#katman').hidden=false;}
+$('#katmanBtn').onclick=katmanla;
+const metin2=$('#metin2'),kaydet2=$('#kaydet2'),onceki2=((vkOku().istatistik||{}).ornek2||{}).metin;if(onceki2)metin2.value=onceki2;
+const metin2Durum=()=>{const n=metin2.value.trim().length;kaydet2.disabled=n<60;$('#metin2Not').textContent=n<60?'En az 60 karakter yaz ('+n+'/60).':'Hazır.';};
+metin2.addEventListener('input',metin2Durum);metin2Durum();
+function uzman2Ac(){const t=metin2.value.toLocaleLowerCase('tr-TR'),M=[[/düş|dus|kısal|kisal|azal/,'Ortalamanın düştüğünü (gözlem) yazdın'],[/vardiya|gece|karışım|karisim|pay/,'Vardiya karışımının değiştiğini belirttin'],[/içinde|icinde|aynı vardiya|ayni vardiya|sabit|katman|ayrı ayrı|ayri ayri/,'Vardiya içi karşılaştırmaya dayandın'],[/söylenemez|soylenemez|bağlan|baglan|neden|yol aç|yol ac|kanıt|kanit|desteklem|değil|degil/,'Nedensellik iddiasının sınırını yazdın']];
+  $('#ozdeg2').innerHTML=M.map(([re,ad])=>{const v=re.test(t);return '<li class="'+(v?'ok':'no')+'">'+ad+(v?'':' : metninde göremedim')+'</li>';}).join('');$('#uzman2').hidden=false;}
+kaydet2.onclick=()=>{const s=vkOku();s.v=1;s.istatistik=Object.assign({},s.istatistik,{ornek2:{metin:metin2.value.trim(),zaman:new Date().toISOString()}});try{localStorage.setItem(VK_KEY,JSON.stringify(s))}catch(e){}uzman2Ac();$('#uzman2').scrollIntoView({behavior:'smooth',block:'start'});};
+if(onceki2&&onceki2.length>=60)uzman2Ac();
 const sc=document.createElement('script');sc.src='../../docs/analysis-engine.js';sc.onload=()=>{gucN();dur('Motor hazır. Testi çalıştır.');};sc.onerror=()=>dur('İstatistik motoru yüklenemedi.');document.head.appendChild(sc);
 (function(){const s=vkOku().pbi,e=$('#gelenDurum');bitis();if(!s||!s.tamam)return;const ayni=s.olcu&&Math.abs(s.olcu['Kazanc sn']-BEK_PBI['Kazanc sn'])<5e-4;e.className='vk-et '+(ayni?'ok':'no');e.textContent=ayni?'✓ senin panon bununla aynı':'Senin panon farklıydı; test beklenen veriyle yapılır';})();
 """
@@ -456,7 +501,9 @@ SAYFA = {
 for k, d in HEDEF.items():
     d.mkdir(parents=True, exist_ok=True)
     (d / "index.html").write_text(SAYFA[k], encoding="utf-8")
-    shutil.copy(K / "beklenen.json", d / "beklenen.json")
+    # İkinci örnek (istatistik2) yalnız İstatistik sayfasında kullanılır; diğer depolara gerekmeyen anahtar yazılmaz.
+    (d / "beklenen.json").write_text((K / "beklenen.json").read_text(encoding="utf-8") if k == "istatistik"
+                                     else json.dumps({x: y for x, y in B.items() if x != "istatistik2"}, ensure_ascii=False, indent=1), encoding="utf-8")
     print(k, d / "index.html", len(SAYFA[k]) // 1024, "KB")
 
 # Power BI: DAX motorunun yayındaki paketle birebir kopyası (tests/vaka-depo.cjs aynılığı denetler)

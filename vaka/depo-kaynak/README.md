@@ -13,6 +13,8 @@ Kesit'in dört uygulamasını tek bir iş sorusunda birleştiren vakanın verisi
 
 **Beklenen sonuç:** eski 42,44 sn, yeni 41,17 sn, kazanç 1,26 sn (%2,98). Welch t = 2,11, p = 0,035; %95 güven aralığı 0,09–2,44 sn. İstatistiksel fark var, ama üst sınır 4 sn eşiğinin altında: **operasyonel olarak yeterli değil.** 4 sn'lik farkı %80 güçle görmek için grup başına yaklaşık 210 satır yeterdi; sorun örneklem değil, farkın küçüklüğü.
 
+**İkinci örnek (İstatistik sayfası, İzmir deposu):** aynı görünen kazanç (toplamda 1,30 sn, p = 0,023), ama Ekim'de yavaş gece vardiyasının payı %45'ten %25'e indi. Vardiya içinde fark yok (gündüz 0,02 sn, gece −0,15 sn; iki aralık da sıfırı içerir); vardiya karışımı sabit tutulunca fark −0,04 sn. Öğrenci "ortalama süre düştü" (doğru) ile "raf değişikliği düşüşe yol açtı" (bu veri desteklemiyor) arasındaki farkı yazar, sonra uzman değerlendirmesi açılır. Veri `ornek2_izmir.csv`, beklenen değerler `beklenen.json › istatistik2` (SciPy); `kesit-istatistik/verify-vaka.cjs` tarayıcı motoruyla aynı değerleri denetler. İlk veri seti ve beklenenleri değişmedi (ayrı tohum).
+
 ## Nasıl doğrulandı?
 - `uret.py` veriyi tohumlu üreteçle oluşturur ve beklenen sonuçları üç bağımsız yoldan hesaplar: SQLite (adım 1), pandas (adım 2–3), SciPy `ttest_ind(equal_var=False)` (adım 4).
 - Aynı sayılar tarayıcıdaki motorlarla tekrar hesaplanır ve karşılaştırılır: Kesit DAX motoru pandas ile 1e-12, Kesit İstatistik motoru SciPy ile 1e-11 düzeyinde aynı.
