@@ -30,6 +30,33 @@ OZET_TABLO = (
 )
 E = SQL["eleme"]
 
+
+def incele_listesi():
+    """Ham satırların hangi temizlik kuralına takıldığı (Python adımındaki kayıt inceleme paneli için)."""
+    h = json.loads(HAM)
+    c = h["cols"]
+    goruldu, L = set(), []
+    for r in h["rows"]:
+        o = dict(zip(c, r))
+        n = (o["satir_id"], o["tarih"], o["vardiya"], str(o["bolge"]).strip().upper(), str(o["duzen"]).strip().lower(), o["toplayici"], o["sure_sn"])
+        if o["sure_sn"] is None:
+            L.append([r, "bos", "sure_sn"])
+        elif not 5 <= o["sure_sn"] <= 600:
+            L.append([r, "aralik", "sure_sn"])
+        elif n in goruldu:
+            L.append([r, "cift", "satir_id"])
+        else:
+            goruldu.add(n)
+            alan = [k for k in ("bolge", "duzen") if str(o[k]) != n[c.index(k)]]
+            if alan:
+                L.append([r, "yazim", alan[0]])
+    say = {k: sum(1 for x in L if x[1] == k) for k in ("bos", "aralik", "cift", "yazim")}
+    assert say == {"bos": E["bos_sure"], "aralik": E["aralik_disi"], "cift": E["cift"], "yazim": 70}, say
+    return {"cols": c, "rows": L}
+
+
+INCELE = incele_listesi()
+
 # ----------------------------------------------------------------- 1. SQL
 SQL_BASLANGIC = """-- 1) Temiz görünüm: toplama_temiz
 --    · süresi boş olanları ve 5–600 sn dışını ele
@@ -53,26 +80,31 @@ ORDER BY duzen;
 SQL_COZUM = SQL["temiz"] + "\n\n" + SQL["ozet"] + "\n"
 
 sql_govde = f"""<p class="vk-l">Anadolu Market Gebze deposunda Ekim'de raf düzeni değişti: hızlı dönen ürünler toplama hattının başına alındı. Operasyon müdürü yeni düzeni diğer depolara yaymadan önce şunu soruyor: <b>Satır başına toplama süresi gerçekten kısaldı mı, kısaldıysa yaymaya değecek kadar mı?</b> Dört adımda cevaplayacaksın. Bu adımda el terminali kayıtlarını analiz edilebilir hâle getiriyorsun.</p>
-<section class="vk-k c" aria-labelledby="veri"><h2 id="veri">Veri: <code>toplama_ham</code></h2>
+<section class="vk-k c" aria-labelledby="gorev"><h2 id="gorev">İlk görev: ham kayıtları temizle</h2>
+<p>El terminalinden {tr(E["ham"], 0)} satır geldi. Kaçının, hangi nedenle analiz dışı kaldığını kendin bul; beklenen sonuç sayfanın sonunda kapalı duruyor.</p>
+<ol><li><code>toplama_temiz</code> adlı bir görünüm (VIEW) oluştur: boş ve 5–600 sn dışındaki süreleri ele, çift satırları tekille, <code>bolge</code>'yi büyük harfe, <code>duzen</code>'i küçük harfe çevir ve boşlukları kırp.</li>
+<li>Görünümden düzene göre satır sayısı ve ortalama süreyi veren özeti yaz. Son sorgu özetin kendisi olmalı.</li></ol>
+<p class="vk-not" style="margin-top:10px">Önce keşfet (sorgun değişmez, sonuç aşağıda görünür):</p>
+<div class="vk-btn"><button data-hazir="SELECT bolge, duzen, COUNT(*) AS satir FROM toplama_ham GROUP BY bolge, duzen ORDER BY 1, 2;">Yazım farklarını gör</button><button data-hazir="SELECT COUNT(*) AS bos FROM toplama_ham WHERE sure_sn IS NULL;">Boş süreleri say</button><button data-hazir="SELECT satir_id, COUNT(*) AS kez FROM toplama_ham GROUP BY satir_id HAVING COUNT(*) &gt; 1;">Çift okutmaları bul</button></div>
+<label for="ed"><b>Sorgun</b> <span class="vk-not">(SQLite; her çalıştırmada veritabanı baştan kurulur)</span></label>
+<textarea id="ed" class="vk-ed" spellcheck="false">{SQL_BASLANGIC}</textarea>
+<div class="vk-btn"><button class="p" id="calistir">Çalıştır ve denetle</button><button id="cozum">Çözümü göster</button><button id="sifirla">Başa al</button></div>
+<div class="vk-dur" id="dur" role="status" aria-live="polite">SQL motoru hazırlanıyor…</div>
+<div id="sonuc"></div><ul class="vk-chk" id="kontrol" aria-label="Denetim"></ul></section>
+<section class="vk-k" aria-labelledby="veri"><h2 id="veri">Veri: <code>toplama_ham</code></h2>
 <p>Eylül (eski düzen) ve Ekim (yeni düzen) için {tr(E["ham"], 0)} toplama satırı. Her satır bir sipariş kaleminin raftan alınmasıdır.</p>
 <div class="vk-tw"><table><thead><tr><th>Sütun</th><th>Anlamı</th></tr></thead><tbody>
 <tr><td><code>satir_id</code></td><td>Toplama satırı numarası</td></tr><tr><td><code>tarih</code>, <code>vardiya</code></td><td>Gün ve vardiya (Gündüz / Gece)</td></tr>
 <tr><td><code>bolge</code></td><td>Raf bölgesi: A, B, C</td></tr><tr><td><code>duzen</code></td><td>eski / yeni raf düzeni</td></tr>
 <tr><td><code>toplayici</code></td><td>Toplayıcı kodu</td></tr><tr><td><code>sure_sn</code></td><td>Satırı toplama süresi (saniye)</td></tr></tbody></table></div>
 <h3>Bilinen sorunlar</h3><ul><li>Okutulmayan satırlarda süre boş.</li><li>5 sn altı yanlış okutmadır; 600 sn üstü mola ya da kesintidir. İkisi de analiz dışı.</li><li>Terminal bağlantısı kopunca aynı satır iki kez gelmiş (bütün sütunlar aynı).</li><li>Bölge ve düzen metinlerinde boşluk ve büyük/küçük harf farkları var (<code> a</code>, <code>Yeni</code>).</li></ul>
-<div class="vk-btn"><button data-hazir="SELECT bolge, duzen, COUNT(*) AS satir FROM toplama_ham GROUP BY bolge, duzen ORDER BY 1, 2;">Yazım farklarını gör</button><button data-hazir="SELECT COUNT(*) AS bos FROM toplama_ham WHERE sure_sn IS NULL;">Boş süreleri say</button><button data-hazir="SELECT satir_id, COUNT(*) AS kez FROM toplama_ham GROUP BY satir_id HAVING COUNT(*) &gt; 1;">Çift okutmaları bul</button></div></section>
-<section class="vk-k" aria-labelledby="gorev"><h2 id="gorev">Görev</h2>
-<ol><li><code>toplama_temiz</code> adlı bir görünüm (VIEW) oluştur: boş ve 5–600 sn dışındaki süreleri ele, çift satırları tekille, <code>bolge</code>'yi büyük harfe, <code>duzen</code>'i küçük harfe çevir ve boşlukları kırp.</li>
-<li>Görünümden düzene göre satır sayısı ve ortalama süreyi veren özeti yaz. Son sorgu özetin kendisi olmalı.</li></ol>
-<label for="ed"><b>Sorgun</b> <span class="vk-not">(SQLite; her çalıştırmada veritabanı baştan kurulur)</span></label>
-<textarea id="ed" class="vk-ed" spellcheck="false">{SQL_BASLANGIC}</textarea>
-<div class="vk-btn"><button class="p" id="calistir">Çalıştır ve denetle</button><button id="cozum">Çözümü göster</button><button id="sifirla">Başa al</button></div>
-<div class="vk-dur" id="dur" role="status" aria-live="polite">SQL motoru hazırlanıyor…</div>
-<div id="sonuc"></div><ul class="vk-chk" id="kontrol" aria-label="Denetim"></ul></section>
+</section>
 <section class="vk-k" aria-labelledby="bek"><h2 id="bek">Beklenen çıktı</h2>
+<details><summary>Beklenen sonucu aç (önce kendin dene)</summary>
 <p>Ham {tr(E["ham"], 0)} satırdan {tr(E["bos_sure"], 0)} boş süre, {tr(E["aralik_disi"], 0)} aralık dışı süre ve {tr(E["cift"], 0)} çift okutma çıkar; <b>{tr(E["temiz"], 0)} temiz satır</b> kalır.</p>
 {OZET_TABLO}
-<p class="vk-not">Bu çıktı ve <code>toplama_temiz</code> tablosu bir sonraki adımın girdisidir: Python adımı tam olarak bu {tr(E["temiz"], 0)} satırla başlar.</p>
+</details>
+<p class="vk-not">Bu adımı çözünce <code>toplama_temiz</code> tablon bu tarayıcıda saklanır. 2. adımda “Kendi çıktımla devam et” ya da “Örnek veriyle dene” seçeneğinden birini seçersin; hangi veriyle çalıştığın orada yazar.</p>
 <div class="vk-son"><button id="indir">toplama_temiz.csv indir</button><a class="vk-go" href="/kesit-python/vaka/depo/">2. adım: Python ile denetle →</a></div></section>"""
 
 sql_betik = (
@@ -103,7 +135,7 @@ function denetle(db,r){const L=[],ok=(c,t)=>L.push([c,t]);
   $('#kontrol').innerHTML=L.map(([c,t])=>'<li class="'+(c?'ok':'no')+'">'+vkEsc(t)+'</li>').join('');
   return L.every(x=>x[0]);}
 function calistir(){if(!SQLM)return;const db=kur();try{const rs=db.exec($('#ed').value);const r=rs[rs.length-1];goster(r);const tamam=denetle(db,r);
-  if(tamam){const t=db.exec('SELECT * FROM toplama_temiz ORDER BY satir_id')[0];son=t;vkYaz('sql',{ozet:r.values});vkAdimlar();dur('Tamam: çıktın beklenenle aynı. 2. adıma geçebilirsin.');}
+  if(tamam){const t=db.exec('SELECT * FROM toplama_temiz ORDER BY satir_id')[0];son=t;vkCiktiYaz(vkCsvMetin(t.columns,t.values),t.values.length);vkYaz('sql',{ozet:r.values,satir:t.values.length});vkAdimlar();dur('Tamam: çıktın beklenenle aynı ve bu tarayıcıya kaydedildi ('+vkSay(t.values.length)+' satır). 2. adımda “Kendi çıktımla devam et” ile kullanabilirsin.');}
   else dur('Bazı denetimler geçmedi; işaretli maddelere bak. Takılırsan “Çözümü göster”.');}
   catch(e){$('#sonuc').innerHTML='';$('#kontrol').innerHTML='';dur('SQL hatası: '+e.message);}finally{db.close();}}
 $('#calistir').onclick=calistir;
@@ -164,7 +196,8 @@ print("__VAKA__" + _j.dumps({{"denetim": denetim, "grup": {{k: {{"count": int(v[
 VP, VO = PY["vardiya_payi"], PY["vardiya_ort"]
 py_govde = f"""<p class="vk-l">1. adımda SQL, ham kayıtları {tr(E["temiz"], 0)} temiz satıra indirdi. Panoya ve teste geçmeden önce bu çıktıya güvenebilir miyiz? Python ile iki şeyi denetliyorsun: temizlik gerçekten yapıldı mı ve iki dönem adil karşılaştırılabilir mi?</p>
 <section class="vk-k vk-gelen" aria-labelledby="gelen"><h2 id="gelen">Önceki adımdan gelen: SQL çıktısı <span class="vk-et bek" id="gelenDurum">1. adım henüz çözülmedi</span></h2>
-<p>Girdi, 1. adımın beklenen çıktısıdır: <code>toplama_temiz.csv</code> ({tr(E["temiz"], 0)} satır). Bu dosya Python motoruna hazır yüklenir.</p>{OZET_TABLO}</section>
+<p>Python motoruna <code>toplama_temiz.csv</code> olarak hangi tablonun yükleneceğini seç:</p><div id="kaynak"></div>
+<details><summary>Beklenen SQL özeti (karşılaştırma için)</summary>{OZET_TABLO}</details></section>
 <section class="vk-k" aria-labelledby="gorev"><h2 id="gorev">Görev</h2>
 <ol><li><code>denetim</code> sözlüğündeki eksik satırı tamamla: <code>satir_id</code> sütununda kaç tekrar var?</li><li>Çıktıda üç şeye bak: temizlik (hepsi 0 olmalı), vardiya payları (iki dönemde benzer mi?) ve vardiya içi ortalamalar (fark iki vardiyada da aynı yönde mi?).</li></ol>
 <label for="ed"><b>Kodun</b> <span class="vk-not">(gerçek Python, tarayıcıda Pyodide ile; ilk çalıştırmada motor ve pandas iner, 10–30 sn sürebilir)</span></label>
@@ -172,6 +205,11 @@ py_govde = f"""<p class="vk-l">1. adımda SQL, ham kayıtları {tr(E["temiz"], 0
 <div class="vk-btn"><button class="p" id="calistir">Çalıştır ve denetle</button><button id="cozum">Çözümü göster</button><button id="sifirla">Başa al</button></div>
 <div class="vk-dur" id="dur" role="status" aria-live="polite">Python motoru ilk çalıştırmada yüklenecek.</div>
 <pre id="cikti" hidden></pre><ul class="vk-chk" id="kontrol" aria-label="Denetim"></ul></section>
+<section class="vk-k" aria-labelledby="incele"><h2 id="incele">Bir kaydı incele: neden elendi?</h2>
+<p>SQL {tr(E["ham"] - E["temiz"], 0)} satırı eledi, {tr(70, 0)} satırın yazımını düzeltti. Bir kayıt seç; hangi kuralın çalıştığını ve sonucunu gör. Temizleme kararını tek kayıt üzerinde doğrula.</p>
+<div class="vk-sec" role="group" aria-label="Kural seç" id="kurallar"></div>
+<div class="vk-iki"><div class="vk-tw" style="max-height:340px;overflow:auto;border:1px solid var(--line);border-radius:8px"><table><thead><tr><th>satir_id</th><th>bolge</th><th>duzen</th><th class="n">sure_sn</th></tr></thead><tbody id="kayitlar"></tbody></table></div>
+<div id="kayit" class="vk-k" style="margin:0" aria-live="polite"><p class="vk-not">Soldan bir kayıt seç.</p></div></div></section>
 <section class="vk-k" aria-labelledby="bek"><h2 id="bek">Beklenen çıktı</h2>
 <div class="vk-iki"><div><h3>Temizlik denetimi</h3><ul class="vk-chk"><li class="ok">satir_sayisi = {tr(DEN["satir_sayisi"], 0)}</li><li class="ok">bos_sure = 0, aralik_disi = 0, tekrar_eden_id = 0</li><li class="ok">düzen: eski, yeni · bölge: A, B, C</li></ul></div>
 <div><h3>Vardiya payı (satır oranı)</h3><div class="vk-tw"><table><thead><tr><th>duzen</th><th class="n">Gündüz</th><th class="n">Gece</th></tr></thead><tbody>{"".join(f'<tr><td>{d}</td><td class="n">{tr(VP[d]["Gündüz"], 3)}</td><td class="n">{tr(VP[d]["Gece"], 3)}</td></tr>' for d in ("eski", "yeni"))}</tbody></table></div></div></div>
@@ -191,20 +229,42 @@ py_betik = (
     + J(PY_TEST)
     + ";const BEK_SQL="
     + J(SQL["ozet_sonuc"])
+    + ";const INC="
+    + J(INCELE)
     + r""";
 const $=s=>document.querySelector(s), dur=t=>$('#dur').textContent=t;
+// Kayıt inceleme: her kural için ad, koşul ve sonuç
+const KURAL={bos:{ad:'Boş süre',kosul:'sure_sn boş olmamalı (IS NOT NULL)',neden:'Satır okutulmamış; süre bilinmiyor.',sonuc:'Elendi'},
+  aralik:{ad:'Aralık dışı süre',kosul:'sure_sn 5 ile 600 sn arasında olmalı (BETWEEN 5 AND 600)',neden:v=>v<5?'5 sn altı: yanlış ya da çift tıklamayla okutma.':'600 sn üstü: mola, kesinti ya da unutulan terminal.',sonuc:'Elendi'},
+  cift:{ad:'Çift okutma',kosul:'Bütün sütunları aynı olan satır bir kez kalmalı (SELECT DISTINCT)',neden:'Terminal bağlantısı kopunca aynı satır ikinci kez gelmiş; ilk kopya tabloda kaldı, bu kopya düştü.',sonuc:'Elendi (kopya)'},
+  yazim:{ad:'Yazım düzeltildi',kosul:'bolge büyük harf, duzen küçük harf ve boşluksuz olmalı (UPPER/LOWER + TRIM)',neden:'Metin farklı yazılmış; anlamı aynı olduğu için satır kaldı, değer düzeltildi.',sonuc:'Kaldı, düzeltildi'}};
+const iC=k=>INC.cols.indexOf(k);let incSec='bos';
+function incKurallar(){$('#kurallar').innerHTML=Object.keys(KURAL).map(k=>'<button type="button" data-kural="'+k+'" aria-pressed="'+(k===incSec)+'">'+KURAL[k].ad+' · '+INC.rows.filter(x=>x[1]===k).length+'</button>').join('');
+  document.querySelectorAll('[data-kural]').forEach(b=>b.onclick=()=>{incSec=b.dataset.kural;incKurallar();incListe();});}
+const gor=v=>v==null?'boş':typeof v==='string'?'“'+v+'”':Number.isInteger(v)&&v>9999?String(v):vkSay(v,1);
+function incListe(){const L=INC.rows.map((x,i)=>[x,i]).filter(([x])=>x[1]===incSec);
+  $('#kayitlar').innerHTML=L.map(([x,i])=>{const r=x[0];return '<tr><td><button type="button" class="vk-lnk" data-i="'+i+'">'+r[iC('satir_id')]+'</button></td><td>'+vkEsc(gor(r[iC('bolge')]))+'</td><td>'+vkEsc(gor(r[iC('duzen')]))+'</td><td class="n">'+vkEsc(gor(r[iC('sure_sn')]))+'</td></tr>';}).join('');
+  document.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>incGoster(+b.dataset.i));if(L.length)incGoster(L[0][1]);}
+function incGoster(i){const [r,k,alan]=INC.rows[i],K=KURAL[k],v=r[iC(alan)],neden=typeof K.neden==='function'?K.neden(v):K.neden,id=r[iC('satir_id')];
+  document.querySelectorAll('[data-i]').forEach(b=>b.setAttribute('aria-current',+b.dataset.i===i?'true':'false'));
+  const duz=k==='yazim'?(alan==='bolge'?String(v).trim().toUpperCase():String(v).trim().toLowerCase()):null;
+  $('#kayit').innerHTML='<h3 style="margin-top:0">satir_id '+id+'</h3>'+vkTablo(['Sütun','Değer'],INC.cols.map((c,j)=>[c===alan?c+' ←':c,gor(r[j])]))
+    +'<p><b>Çalışan kural:</b> '+vkEsc(K.ad)+'. <span class="vk-not">'+vkEsc(K.kosul)+'</span></p><p><b>Neden:</b> '+vkEsc(neden)+(duz!=null?' '+vkEsc(gor(v))+' → '+vkEsc(gor(duz))+'.':'')+'</p><p><b>Sonuç:</b> '+vkEsc(K.sonuc)+'.</p>'
+    +'<p class="vk-not">Kendin doğrula: 1. adımdaki SQL editöründe <code>SELECT * FROM toplama_ham WHERE satir_id = '+id+';</code> ya da temiz tabloda <code>df[df["satir_id"] == '+id+']</code>'+(k==='yazim'||k==='cift'?' (bir satır döner)':' (boş döner)')+'.</p>';}
+incKurallar();incListe();
 // Kesit Python'un motoru (pyworker.js): aynı Pyodide, aynı uyumluluk katmanı.
 const M={w:null,seq:0,pend:new Map(),hazir:null,dosya:false};
+let KAY=vkKaynak($('#kaynak'),CSV,k=>{KAY=k;M.dosya=false;$('#cikti').hidden=true;$('#kontrol').innerHTML='';dur('Veri değişti: '+(k.kaynak==='kendi'?'kendi SQL çıktın':'örnek veri')+'. Kodu yeniden çalıştır.');});
 function isci(){if(M.w)return M.w;const w=M.w=new Worker('../../pyworker.js');w.onmessage=ev=>{const m=ev.data;if(m.state){if(m.state==='yukleniyor')dur('Python motoru yükleniyor…');if(m.state==='paket')dur('Paketler hazırlanıyor (pandas)…');return;}if(m.id==null)return;const p=M.pend.get(m.id);if(!p)return;M.pend.delete(m.id);m.ok?p.ok(m.res):p.bad(new Error(m.msg));};w.onerror=e=>{e.preventDefault&&e.preventDefault();dur('Python motoru başlatılamadı. Bağlantını kontrol edip yeniden dene.');M.w=null;M.hazir=null;};return w;}
 const cagir=(cmd,ek)=>new Promise((ok,bad)=>{const id=++M.seq;M.pend.set(id,{ok,bad});isci().postMessage(Object.assign({id,cmd},ek));});
-async function hazirla(){if(!M.hazir)M.hazir=cagir('boot');await M.hazir;if(!M.dosya){const r=await cagir('run',{opt:{code:'open("toplama_temiz.csv","w",encoding="utf-8").write('+JSON.stringify(CSV)+')',ns:''}});if(r.err)throw new Error(r.err.msg);M.dosya=true;}}
+async function hazirla(){if(!M.hazir)M.hazir=cagir('boot');await M.hazir;if(!M.dosya){const r=await cagir('run',{opt:{code:'open("toplama_temiz.csv","w",encoding="utf-8").write('+JSON.stringify(KAY.csv)+')',ns:''}});if(r.err)throw new Error(r.err.msg);M.dosya=true;}}
 async function calistir(){const b=$('#calistir');b.disabled=true;$('#kontrol').innerHTML='';try{await hazirla();dur('Kod çalışıyor…');
   const r=await cagir('run',{opt:{code:$('#ed').value,tests:TEST,ns:''}});
   let out=String(r.out||''),veri=null;const i=out.lastIndexOf('__VAKA__');if(i>=0){try{veri=JSON.parse(out.slice(i+8).trim())}catch(e){}out=out.slice(0,i);}
   $('#cikti').hidden=false;$('#cikti').textContent=(out+(r.stderr?'\n'+r.stderr:'')).trim()||'(çıktı yok)';
   if(r.err){const t=r.err.phase==='test';$('#kontrol').innerHTML='<li class="no">'+vkEsc(t?'Denetim: '+r.err.msg:r.err.type+': '+r.err.msg+(r.err.line?' (satır '+r.err.line+')':''))+'</li>';dur(t?'Kod çalıştı ama bir denetim geçmedi.':'Kod hata verdi.');return;}
   $('#kontrol').innerHTML=['Satır sayısı 1. adımla aynı','Temizlik tamam: boş, aralık dışı ve tekrar yok','Yazım farkı yok','Vardiya karışımı iki dönemde benzer','Grup ortalamaları ve sayıları beklenenle aynı'].map(t=>'<li class="ok">'+t+'</li>').join('');
-  if(veri)vkYaz('python',veri);vkAdimlar();dur('Tamam: denetim geçti. 3. adıma geçebilirsin.');}
+  if(veri)vkYaz('python',Object.assign(veri,{kaynak:KAY.kaynak}));vkAdimlar();dur('Tamam: denetim geçti ('+(KAY.kaynak==='kendi'?'senin SQL çıktınla':'örnek veriyle')+'). 3. adıma geçebilirsin.');}
  catch(e){dur('Çalıştırılamadı: '+e.message);}finally{b.disabled=false;}}
 $('#calistir').onclick=calistir;
 $('#cozum').onclick=()=>{$('#ed').value=COZUM;dur('Çözüm yazıldı. “Çalıştır ve denetle” ile dene.');};
@@ -231,7 +291,8 @@ olcu_html = "".join(
 PG = PY["grup"]
 pbi_govde = f"""<p class="vk-l">Veri denetimden geçti. Şimdi operasyon ekibinin her gün bakacağı panoyu kuruyorsun: yeni düzen satır başına kaç saniye kazandırıyor, hangi bölgede daha çok? Ölçüleri DAX ile yaz; kartlar ve grafik ölçülerden çizilir.</p>
 <section class="vk-k vk-gelen" aria-labelledby="gelen"><h2 id="gelen">Önceki adımdan gelen: Python denetimi <span class="vk-et bek" id="gelenDurum">2. adım henüz çözülmedi</span></h2>
-<p>Denetimden geçen {tr(E["temiz"], 0)} satır modele <code>Toplama</code> tablosu olarak yüklenir. Python'un grup özeti panonun doğru olup olmadığını anlamak için referanstır:</p>
+<p>Modele <code>Toplama</code> tablosu olarak hangi verinin yükleneceğini seç:</p><div id="kaynak"></div>
+<p>Python'un grup özeti panonun doğru olup olmadığını anlamak için referanstır:</p>
 <div class="vk-tw"><table><thead><tr><th>duzen</th><th class="n">count</th><th class="n">mean</th><th class="n">std</th></tr></thead><tbody>{"".join(f'<tr><td>{d}</td><td class="n">{tr(PG[d]["count"], 0)}</td><td class="n">{tr(PG[d]["mean"], 3)}</td><td class="n">{tr(PG[d]["std"], 3)}</td></tr>' for d in ("eski", "yeni"))}</tbody></table></div></section>
 <section class="vk-k" aria-labelledby="gorev"><h2 id="gorev">Görev: ölçüleri yaz</h2>
 <p>İlk dört ölçü hazır. <code>Kazanc sn</code> (eski ortalama − yeni ortalama) ve <code>Kazanc %</code> (kazancın eski ortalamaya oranı; sıfıra bölmeye dayanıklı) ölçülerini sen yaz.</p>
@@ -260,8 +321,10 @@ pbi_betik = (
     + J(PY["grup"])
     + r""";
 const $=s=>document.querySelector(s), dur=t=>$('#dur').textContent=t;
-const veri=vkCsvOku(CSV), SAY=['satir_id','sure_sn'];
-window.PBI_MODEL={tables:{Toplama:{rows:veri.rows.map(r=>{const o={};veri.cols.forEach((c,i)=>o[c]=SAY.includes(c)?Number(r[i]):r[i]);return o;}),cols:veri.cols,kind:'fact'}},rels:[]};
+const SAY=['satir_id','sure_sn'];let veri=null,MOTOR=null;
+const modelKur=csv=>{veri=vkCsvOku(csv);return {tables:{Toplama:{rows:veri.rows.map(r=>{const o={};veri.cols.forEach((c,i)=>o[c]=SAY.includes(c)?Number(r[i]):r[i]);return o;}),cols:veri.cols,kind:'fact'}},rels:[]};};
+let KAY=vkKaynak($('#kaynak'),CSV,k=>{KAY=k;window.PBI_MODEL=modelKur(k.csv);MOTOR=window.PBI_CREATE_DAX?window.PBI_CREATE_DAX(window.PBI_MODEL):null;$('#pano').hidden=true;$('#kontrol').innerHTML='';dur('Veri değişti: '+(k.kaynak==='kendi'?'kendi SQL çıktın':'örnek veri')+'. Ölçüleri yeniden çalıştır.');});
+window.PBI_MODEL=modelKur(KAY.csv);
 const sc=document.createElement('script');sc.src='dax.js';sc.onload=()=>dur('DAX motoru hazır. Eksik iki ölçüyü yaz ve çalıştır.');sc.onerror=()=>dur('DAX motoru yüklenemedi.');document.head.appendChild(sc);
 function olculer(){const ms={};document.querySelectorAll('[data-olcu]').forEach(t=>ms[t.dataset.olcu]={name:t.dataset.olcu,expr:t.value.trim()});return ms;}
 function grafik(rows){const W=Math.max(300,Math.round(document.querySelector('#grafik').clientWidth||520)),H=230,L=40,B=34,max=Math.max(5,...rows.map(r=>r.vals[2]||0))*1.1,y=v=>H-B-(v/max)*(H-B-12),bw=(W-L-20)/rows.length;
@@ -269,7 +332,7 @@ function grafik(rows){const W=Math.max(300,Math.round(document.querySelector('#g
   for(let t=0;t<=max;t+=1){s+='<line x1="'+L+'" x2="'+(W-10)+'" y1="'+y(t)+'" y2="'+y(t)+'" stroke="#DEDBD2"/><text x="'+(L-6)+'" y="'+(y(t)+4)+'" text-anchor="end" font-size="12" fill="#5A574E">'+t+'</text>';}
   rows.forEach((r,i)=>{const v=r.vals[2]||0,x=L+10+i*bw;s+='<rect x="'+x+'" y="'+y(v)+'" width="'+(bw-20)+'" height="'+(H-B-y(v))+'" fill="#7A5600" rx="3"/><text x="'+(x+(bw-20)/2)+'" y="'+(y(v)-6)+'" text-anchor="middle" font-size="13" font-weight="600" fill="#1B1A16">'+vkSay(v,2)+'</text><text x="'+(x+(bw-20)/2)+'" y="'+(H-12)+'" text-anchor="middle" font-size="13" fill="#1B1A16">Bölge '+vkEsc(r.keys[0])+'</text>';});
   s+='<line x1="'+L+'" x2="'+(W-10)+'" y1="'+y(4)+'" y2="'+y(4)+'" stroke="#B3261E" stroke-width="2" stroke-dasharray="6 4"/><text x="'+(W-12)+'" y="'+(y(4)-6)+'" text-anchor="end" font-size="12" fill="#B3261E">eşik 4 sn</text></svg>';return s;}
-function calistir(){if(!window.PBI_DAX){dur('DAX motoru daha yüklenmedi.');return;}const D=window.PBI_DAX,ms=olculer(),deg={},L=[];let hata=false;
+function calistir(){if(!window.PBI_DAX){dur('DAX motoru daha yüklenmedi.');return;}const D=MOTOR||window.PBI_DAX,ms=olculer(),deg={},L=[];let hata=false;
   document.querySelectorAll('[data-olcu]').forEach((t,i)=>{const h=$('#h'+i);h.textContent='';try{if(!t.value.trim())throw new Error('Ölçü boş.');deg[t.dataset.olcu]=D.evalMeasure(ms,t.value.trim(),[]);}catch(e){h.textContent=e.message;hata=true;}});
   const yakin=(a,b,e)=>typeof a==='number'&&Math.abs(a-b)<e;
   L.push([!hata,'Bütün ölçüler hatasız çalıştı']);
@@ -282,7 +345,7 @@ function calistir(){if(!window.PBI_DAX){dur('DAX motoru daha yüklenmedi.');retu
   if(!hata){$('#pano').hidden=false;$('#kartlar').innerHTML=[['Eski ort.',deg['Eski Ort'],' sn'],['Yeni ort.',deg['Yeni Ort'],' sn'],['Kazanç',deg['Kazanc sn'],' sn'],['Kazanç %',(deg['Kazanc %']||0)*100,'']].map(([a,v,b])=>'<div><span>'+a+'</span><b>'+(b?'':'%')+vkSay(v,2)+b+'</b></div>').join('');
     if(q)$('#grafik').innerHTML=grafik(q.rows);
     try{const m=D.query({rows:[{t:'Toplama',c:'vardiya'}],measures:ms,values:['[Eski Ort]','[Yeni Ort]','[Kazanc sn]'],totals:true});$('#matris').innerHTML=vkTablo(['vardiya','Eski Ort','Yeni Ort','Kazanc sn'],[...m.rows.map(r=>[r.keys[0],...r.vals]),['Toplam',...(m.total||[])]],[1,2,3]);}catch(e){$('#matris').textContent=e.message;}}
-  const tamam=L.every(x=>x[0]);if(tamam){vkYaz('pbi',{olcu:{'Eski Ort':deg['Eski Ort'],'Yeni Ort':deg['Yeni Ort'],'Kazanc sn':deg['Kazanc sn'],'Kazanc %':deg['Kazanc %']}});vkAdimlar();dur('Tamam: pano beklenenle aynı. 4. adıma geçebilirsin.');}else dur(hata?'Bir ölçü hata verdi; kutunun altındaki mesaja bak.':'Ölçüler çalıştı ama sonuç beklenenden farklı.');}
+  const tamam=L.every(x=>x[0]);if(tamam){vkYaz('pbi',{kaynak:KAY.kaynak,olcu:{'Eski Ort':deg['Eski Ort'],'Yeni Ort':deg['Yeni Ort'],'Kazanc sn':deg['Kazanc sn'],'Kazanc %':deg['Kazanc %']}});vkAdimlar();dur('Tamam: pano beklenenle aynı ('+(KAY.kaynak==='kendi'?'senin SQL çıktınla':'örnek veriyle')+'). 4. adıma geçebilirsin.');}else dur(hata?'Bir ölçü hata verdi; kutunun altındaki mesaja bak.':'Ölçüler çalıştı ama sonuç beklenenden farklı.');}
 $('#calistir').onclick=calistir;
 $('#cozum').onclick=()=>{document.querySelectorAll('[data-olcu]').forEach(t=>t.value=COZUM[t.dataset.olcu]);dur('Çözüm yazıldı. “Ölçüleri çalıştır” ile dene.');};
 $('#indir').onclick=()=>vkCsvIndir('toplama_temiz.csv',veri.cols,veri.rows);
@@ -294,10 +357,12 @@ $('#indir').onclick=()=>vkCsvIndir('toplama_temiz.csv',veri.cols,veri.rows);
 st_govde = f"""<p class="vk-l">Pano yeni düzenin satır başına {tr(OL["Kazanc sn"])} sn kazandırdığını gösteriyor. Müdürün iki sorusu var: <b>Bu fark gerçek mi?</b> ve <b>Diğer depolara yaymaya yeter mi?</b> İlki istatistiksel, ikincisi operasyonel bir sorudur; cevapları farklı olabilir.</p>
 <section class="vk-k vk-gelen" aria-labelledby="gelen"><h2 id="gelen">Önceki adımdan gelen: pano ölçüleri <span class="vk-et bek" id="gelenDurum">3. adım henüz çözülmedi</span></h2>
 <div class="vk-kart"><div><span>Eski ort.</span><b>{tr(OL["Eski Ort"])} sn</b></div><div><span>Yeni ort.</span><b>{tr(OL["Yeni Ort"])} sn</b></div><div><span>Kazanç</span><b>{tr(OL["Kazanc sn"])} sn</b></div><div><span>Kazanç %</span><b>%{tr(OL["Kazanc %"] * 100)}</b></div></div>
-<p class="vk-not">Test, panonun arkasındaki aynı {tr(E["temiz"], 0)} satırla yapılır ({tr(PG["eski"]["count"], 0)} eski, {tr(PG["yeni"]["count"], 0)} yeni).</p></section>
-<section class="vk-k" aria-labelledby="gorev"><h2 id="gorev">Görev: iki soruyu ayır</h2>
-<ol><li><b>İstatistiksel soru:</b> Eski ve yeni ortalama arasındaki fark sıfırdan farklı mı? Varyanslar eşit varsayılmadan (Welch) iki örneklem t-testi.</li>
-<li><b>Operasyonel soru:</b> Yeni düzeni yaymanın raf, etiket ve eğitim maliyeti, satır başına <b>en az 4 sn</b> kazançla geri dönüyor. Farkın güven aralığı bu eşiğe göre nerede?</li></ol>
+<p>Test hangi tabloyla yapılsın?</p><div id="kaynak"></div>
+<p class="vk-not">Beklenen tabloda {tr(E["temiz"], 0)} satır var ({tr(PG["eski"]["count"], 0)} eski, {tr(PG["yeni"]["count"], 0)} yeni).</p></section>
+<section class="vk-k" aria-labelledby="gorev"><h2 id="gorev">Görev: üç soruyu ayrı yanıtla</h2>
+<ol><li><b>Ne gözlendi?</b> Eski ve yeni ortalama arasındaki fark ne kadar, belirsizliği ne kadar? Varyanslar eşit varsayılmadan (Welch) iki örneklem t-testi ve güven aralığı.</li>
+<li><b>Hedef karşılandı mı?</b> Yeni düzeni yaymanın raf, etiket ve eğitim maliyeti, satır başına <b>en az 4 sn</b> kazançla geri dönüyor. Farkın güven aralığı bu eşiğe göre nerede?</li>
+<li><b>Farkı yeni düzene bağlayabilir miyiz?</b> Eylül ile Ekim karşılaştırılıyor; iki dönem arasında düzenden başka ne değişmiş olabilir? Bunu test cevaplamaz, sen gerekçelendirirsin.</li></ol>
 <div class="vk-iki"><label>Operasyon eşiği (sn/satır)<input id="esik" type="number" min="0.5" max="10" step="0.5" value="{ST["esik"]:g}" style="display:block;width:100%;font:inherit;padding:8px;border:1px solid var(--line);border-radius:8px;margin-top:4px"></label>
 <label>Güven düzeyi<select id="guven" style="display:block;width:100%;font:inherit;padding:8px;border:1px solid var(--line);border-radius:8px;margin-top:4px"><option value="0.90">%90</option><option value="0.95" selected>%95</option><option value="0.99">%99</option></select></label></div>
 <div class="vk-btn"><button class="p" id="calistir">Testi çalıştır</button></div>
@@ -306,8 +371,22 @@ st_govde = f"""<p class="vk-l">Pano yeni düzenin satır başına {tr(OL["Kazanc
 <div id="karar" class="vk-k c" style="margin:10px 0"></div><ul class="vk-chk" id="kontrol" aria-label="Denetim"></ul></div></section>
 <section class="vk-k" aria-labelledby="bek"><h2 id="bek">Beklenen çıktı (%95, eşik 4 sn)</h2>
 <div class="vk-tw"><table><tbody><tr><th>Fark (eski − yeni)</th><td class="n">{tr(ST["fark"], 3)} sn</td></tr><tr><th>Welch t · serbestlik derecesi</th><td class="n">{tr(ST["t"], 3)} · {tr(ST["df"], 1)}</td></tr><tr><th>p değeri (iki yönlü)</th><td class="n">{tr(ST["p"], 4)}</td></tr><tr><th>%95 güven aralığı</th><td class="n">{tr(ST["alt"], 2)} – {tr(ST["ust"], 2)} sn</td></tr><tr><th>Aylık kazanç ({tr(ST["satir_ay"], 0)} satır)</th><td class="n">≈ {tr(ST["aylik_saat"], 1)} saat (eşik {tr(ST["esik_saat"], 1)} saat)</td></tr></tbody></table></div>
-<p><b>Karar:</b> p = {tr(ST["p"], 3)} &lt; 0,05: fark büyük olasılıkla gerçek, yeni düzen işe yarıyor. Ama güven aralığının üst sınırı {tr(ST["ust"], 2)} sn, 4 sn eşiğinin altında: gerçek kazanç büyük olasılıkla yaymayı karşılamıyor. <b>İstatistiksel fark var; operasyonel olarak yeterli değil.</b> Öneri: Gebze'de yeni düzen kalsın, diğer depolara yayma kararı bekletilsin; kazancı büyütecek ek değişiklik (ör. C bölgesindeki ağır ürünler) denensin.</p>
-<p class="vk-not">Sorun örneklem küçüklüğü değil: 4 sn'lik farkı %80 güçle görmek için grup başına yaklaşık <span id="gerekN">—</span> satır yeterdi, elimizde {tr(PG["eski"]["count"], 0)} var. Veri, farkın küçük olduğunu söylüyor.</p>
+<p class="vk-not">4 sn'lik farkı %80 güçle görmek için grup başına yaklaşık <span id="gerekN">—</span> satır yeterdi, elimizde {tr(PG["eski"]["count"], 0)} var. Sorun örneklem küçüklüğü değil, farkın küçüklüğü.</p></section>
+<section class="vk-k c" aria-labelledby="yaz"><h2 id="yaz">Kararını yaz</h2>
+<p>Müdüre gidecek iki üç cümleyi yaz: ne gözlendi, hedef karşılandı mı, fark yeni düzene bağlanabilir mi? Kaydedince uzman değerlendirmesi açılır ve kendi metninle karşılaştırırsın.</p>
+<label for="metin" class="vk-not">Kararın ve gerekçen</label>
+<textarea id="metin" class="vk-ed" style="min-height:130px;font-family:var(--f-b);font-size:1rem" placeholder="Örn. Ekim'de toplama süresi … sn kısaldı; …"></textarea>
+<div class="vk-btn"><button class="p" id="kaydet" disabled>Kaydet ve uzman değerlendirmesini aç</button><span class="vk-not" id="metinNot" style="align-self:center">En az 60 karakter yaz.</span></div>
+<div id="uzman" hidden>
+<h3>Metnin üç soruyu karşılıyor mu?</h3><ul class="vk-chk" id="ozdeg" aria-label="Öz değerlendirme"></ul>
+<p class="vk-not">Bu işaretler yalnızca metinde geçen sözcüklere bakar; puan değildir. Asıl karşılaştırmayı aşağıdaki değerlendirmeyle sen yap.</p>
+<h3>Uzman değerlendirmesi</h3>
+<p><b>1. Ne gözlendi?</b> Ekim'de (yeni düzen) satır başına toplama süresi ortalama {tr(ST["fark"], 3)} sn kısaldı; %95 güven aralığı {tr(ST["alt"], 2)}–{tr(ST["ust"], 2)} sn. p = {tr(ST["p"], 3)}, farkın sıfır olmadığına işaret ediyor; ama alt sınır {tr(ST["alt"], 2)} sn'ye kadar iniyor, yani etki çok küçük de olabilir. p değeri etkinin büyüklüğünü ya da önemini söylemez; büyüklüğü güven aralığı gösterir.</p>
+<p><b>2. Hedef karşılandı mı?</b> Hayır. Aralığın tamamı 4 sn hedefinin altında; en iyimser tahmin ({tr(ST["ust"], 2)} sn) bile hedefin yarısı kadar. Aylık ≈ {tr(ST["aylik_saat"], 1)} saatlik kazanç, {tr(ST["esik_saat"], 1)} saatlik geri dönüş eşiğine yetmiyor.</p>
+<p><b>3. Farkı yeni düzene bağlayabilir miyiz?</b> Ancak dikkatle. 2. adımda vardiya karışımının iki dönemde aynı olduğunu (%{tr(VP["eski"]["Gündüz"] * 100, 0)} gündüz) ve farkın iki vardiyada da aynı yönde olduğunu gördük; vardiya açıklaması zayıf. Ama bu bir önce–sonra karşılaştırması: Eylül ile Ekim arasında sipariş ve ürün karışımı, toplayıcıların deneyimi ya da sezon da değişmiş olabilir. Yeni düzenin katkısını ayırmak için aynı dönemde eski düzende kalan bir bölge ya da depoyla, benzer vardiya ve toplayıcılar üzerinden karşılaştırma gerekir.</p>
+<p><b>Örnek karar metni:</b> “Ekim'de toplama süresi satır başına ortalama {tr(ST["fark"], 2)} sn kısaldı (%95 GA {tr(ST["alt"], 2)}–{tr(ST["ust"], 2)} sn). Aralığın tamamı 4 sn'lik yayma eşiğinin altında; yeni düzeni diğer depolara yaymak için yeterli değil. Gebze'de düzen kalsın; kazancın düzenden geldiğini ayırmak için benzer vardiyalarda, eski düzende kalan bir bölgeyle aynı dönemde karşılaştırma yapılsın.”</p>
+<p class="vk-not">p değeri ile etki büyüklüğünü ayrı değerlendirme ilkesi için: <a href="https://doi.org/10.1080/00031305.2016.1154108" rel="noopener">Amerikan İstatistik Derneği, p değerleri bildirgesi (2016)</a>.</p>
+</div>
 <div class="vk-son"><span class="vk-not" id="bitis">Dört adımı da çözünce vaka tamamlanır.</span><a class="vk-go" href="/#vaka">Vakayı bitir, Kesit'e dön →</a></div></section>"""
 st_betik = (
     "const CSV="
@@ -318,8 +397,10 @@ st_betik = (
     + J(OL)
     + r""";
 const $=s=>document.querySelector(s), dur=t=>$('#dur').textContent=t;
-const v=vkCsvOku(CSV),iD=v.cols.indexOf('duzen'),iS=v.cols.indexOf('sure_sn');
-const eski=v.rows.filter(r=>r[iD]==='eski').map(r=>+r[iS]),yeni=v.rows.filter(r=>r[iD]==='yeni').map(r=>+r[iS]);
+let eski=[],yeni=[];
+const ayir=csv=>{const v=vkCsvOku(csv),iD=v.cols.indexOf('duzen'),iS=v.cols.indexOf('sure_sn');eski=v.rows.filter(r=>r[iD]==='eski').map(r=>+r[iS]);yeni=v.rows.filter(r=>r[iD]==='yeni').map(r=>+r[iS]);};
+let KAY=vkKaynak($('#kaynak'),CSV,k=>{KAY=k;ayir(k.csv);gucN();$('#sonuc').hidden=true;dur('Veri değişti: '+(k.kaynak==='kendi'?'kendi SQL çıktın':'örnek veri')+'. Testi yeniden çalıştır.');});
+ayir(KAY.csv);
 const ort=a=>a.reduce((s,x)=>s+x,0)/a.length,vr=a=>{const m=ort(a);return a.reduce((s,x)=>s+(x-m)**2,0)/(a.length-1)};
 // Kesit İstatistik motoru (docs/analysis-engine.js): t dağılımı (tP, tInv) ve normal ters fonksiyon.
 // Motorun ttest() fonksiyonu alıştırmalar için en çok 500 gözlem alır; burada aynı Welch formülü motorun dağılım fonksiyonlarıyla kurulur.
@@ -333,7 +414,8 @@ function karar(r,esik,g){const a=1-g,anl=r.p<a&&r.alt>0;let op;
   if(r.ust<esik)op={k:'yetersiz',t:'Güven aralığının üst sınırı ('+vkSay(r.ust,2)+' sn) eşiğin altında: gerçek kazanç büyük olasılıkla '+vkSay(esik,1)+' sn’ye ulaşmıyor. <b>Operasyonel olarak yeterli değil.</b>'};
   else if(r.alt>=esik)op={k:'yeterli',t:'Güven aralığının alt sınırı ('+vkSay(r.alt,2)+' sn) eşiğin üstünde. <b>Operasyonel olarak yeterli.</b>'};
   else op={k:'belirsiz',t:'Eşik güven aralığının içinde ('+vkSay(r.alt,2)+' – '+vkSay(r.ust,2)+' sn). <b>Veri karar için yetmiyor;</b> ölçüme devam et ya da eşiği netleştir.'};
-  return {anl,op,html:'<p><b>İstatistiksel:</b> '+(anl?'p = '+vkSay(r.p,4)+' &lt; '+vkSay(a,2)+': fark büyük olasılıkla gerçek.':'p = '+vkSay(r.p,4)+' ≥ '+vkSay(a,2)+': farkın rastlantı olmadığını söyleyemeyiz.')+'</p><p><b>Operasyonel:</b> '+op.t+'</p>'+(anl&&op.k==='yetersiz'?'<p><b>Sonuç: istatistiksel fark var, ama operasyonel olarak yeterli değil.</b></p>':'')};}
+  const gozlem='Yeni düzende ortalama süre satır başına '+vkSay(r.d,3)+' sn daha '+(r.d>=0?'kısa':'uzun')+'; %'+vkSay(g*100,0)+' güven aralığı '+vkSay(r.alt,2)+' – '+vkSay(r.ust,2)+' sn. '+(anl?'p = '+vkSay(r.p,4)+' &lt; '+vkSay(a,2)+': farkın sıfır olmadığına işaret ediyor; büyüklüğünü aralık gösterir.':'p = '+vkSay(r.p,4)+' ≥ '+vkSay(a,2)+': aralık sıfırı içeriyor, farkın rastlantı olmadığını söyleyemeyiz.');
+  return {anl,op,html:'<div class="vk-soru"><h3>1. Ne gözlendi?</h3><p>'+gozlem+'</p><h3>2. Hedef karşılandı mı?</h3><p>'+op.t+'</p><h3>3. Farkı yeni düzene bağlayabilir miyiz?</h3><p>Test bunu tek başına cevaplamaz: iki dönem arasında düzenden başka neyin değiştiğini düşün ve aşağıda <a href="#yaz">kararını yaz</a>.</p></div>'};}
 function calistir(){if(!window.AnalysisEngine){dur('Motor daha yüklenmedi.');return;}const esik=Number($('#esik').value),g=Number($('#guven').value);if(!(esik>0)){dur('Eşik pozitif bir sayı olmalı.');return;}
   const r=welch(eski,yeni,g),k=karar(r,esik,g);$('#sonuc').hidden=false;
   $('#kartlar').innerHTML=[['Fark',vkSay(r.d,3)+' sn'],['t · sd',vkSay(r.t,3)+' · '+vkSay(r.df,0)],['p değeri',vkSay(r.p,4)],['%'+vkSay(g*100,0)+' GA',vkSay(r.alt,2)+' – '+vkSay(r.ust,2)]].map(([a,b])=>'<div><span>'+a+'</span><b>'+b+'</b></div>').join('');
@@ -341,11 +423,20 @@ function calistir(){if(!window.AnalysisEngine){dur('Motor daha yüklenmedi.');re
   const std=g===.95&&esik===BEK.esik,L=[[Math.abs(r.d-BEK.fark)<1e-9,'Fark Power BI kazancıyla aynı ('+vkSay(r.d,4)+' sn)']];
   if(std)L.push([Math.abs(r.p-BEK.p)<1e-6&&Math.abs(r.ust-BEK.ust)<1e-6,'p ve güven aralığı SciPy ile aynı (p = '+vkSay(BEK.p,4)+', üst sınır '+vkSay(BEK.ust,3)+')']);
   $('#kontrol').innerHTML=L.map(([c,t])=>'<li class="'+(c?'ok':'no')+'">'+vkEsc(t)+'</li>').join('');
-  if(std&&L.every(x=>x[0])){vkYaz('istatistik',{karar:'istatistiksel fark var, operasyonel olarak yeterli değil',p:r.p,ust:r.ust});vkAdimlar();bitis();dur('Tamam. Eşiği ya da güven düzeyini değiştirip kararın nasıl değiştiğine bak.');}
+  if(std&&L.every(x=>x[0])){vkYaz('istatistik',Object.assign({},vkOku().istatistik,{karar:'istatistiksel fark var, operasyonel olarak yeterli değil',p:r.p,ust:r.ust,kaynak:KAY.kaynak}));vkAdimlar();bitis();dur('Tamam. Eşiği ya da güven düzeyini değiştirip kararın nasıl değiştiğine bak.');}
   else dur(std?'Sonuç beklenenden farklı.':'Farklı eşik/güven düzeyiyle hesaplandı; denetim %95 ve 4 sn için yapılır.');}
 function bitis(){const s=vkOku(),n=['sql','python','pbi','istatistik'].filter(k=>s[k]&&s[k].tamam).length;$('#bitis').textContent=n===4?'✓ Dört adımın hepsi çözüldü: vaka tamamlandı.':n+'/4 adım çözüldü.';}
 $('#calistir').onclick=calistir;
-const sc=document.createElement('script');sc.src='../../docs/analysis-engine.js';sc.onload=()=>{const z=window.AnalysisEngine.normalInv,sd=Math.sqrt((vr(eski)+vr(yeni))/2),n=Math.ceil(2*((z(.975)+z(.8))*sd/BEK.esik)**2);$('#gerekN').textContent=vkSay(n);dur('Motor hazır. Testi çalıştır.');};sc.onerror=()=>dur('İstatistik motoru yüklenemedi.');document.head.appendChild(sc);
+function gucN(){const A=window.AnalysisEngine;if(!A||!eski.length||!yeni.length)return;const z=A.normalInv,sd=Math.sqrt((vr(eski)+vr(yeni))/2),n=Math.ceil(2*((z(.975)+z(.8))*sd/BEK.esik)**2);$('#gerekN').textContent=vkSay(n);}
+const metin=$('#metin'),kaydet=$('#kaydet');
+const onceki=(vkOku().istatistik||{}).metin;if(onceki){metin.value=onceki;}
+const metinDurum=()=>{const n=metin.value.trim().length;kaydet.disabled=n<60;$('#metinNot').textContent=n<60?'En az 60 karakter yaz ('+n+'/60).':'Hazır.';};
+metin.addEventListener('input',metinDurum);metinDurum();
+function uzmanAc(){const t=metin.value.toLocaleLowerCase('tr-TR'),M=[[/aral|güven|ga\b|\d/,'Farkın büyüklüğünü ve belirsizliğini (aralık) yazdın'],[/hedef|eşik|esik|4 ?sn|yeterli|yaym/,'Hedefle (4 sn) karşılaştırdın'],[/neden|bağla|bagla|vardiya|karışım|karisim|sipariş|siparis|mevsim|sezon|kontrol|ayır|ayir|başka|baska/,'Farkı düzene bağlamanın sınırını belirttin']];
+  $('#ozdeg').innerHTML=M.map(([re,ad])=>{const v=re.test(t);return '<li class="'+(v?'ok':'no')+'">'+ad+(v?'':' : metninde göremedim')+'</li>';}).join('');$('#uzman').hidden=false;}
+kaydet.onclick=()=>{const s=vkOku();s.v=1;s.istatistik=Object.assign({},s.istatistik,{metin:metin.value.trim()});try{localStorage.setItem(VK_KEY,JSON.stringify(s))}catch(e){}uzmanAc();$('#uzman').scrollIntoView({behavior:'smooth',block:'start'});};
+if(onceki&&onceki.length>=60)uzmanAc();
+const sc=document.createElement('script');sc.src='../../docs/analysis-engine.js';sc.onload=()=>{gucN();dur('Motor hazır. Testi çalıştır.');};sc.onerror=()=>dur('İstatistik motoru yüklenemedi.');document.head.appendChild(sc);
 (function(){const s=vkOku().pbi,e=$('#gelenDurum');bitis();if(!s||!s.tamam)return;const ayni=s.olcu&&Math.abs(s.olcu['Kazanc sn']-BEK_PBI['Kazanc sn'])<5e-4;e.className='vk-et '+(ayni?'ok':'no');e.textContent=ayni?'✓ senin panon bununla aynı':'Senin panon farklıydı; test beklenen veriyle yapılır';})();
 """
 )

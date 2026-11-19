@@ -74,6 +74,7 @@ footer a{font-weight:600}
 .case li span{color:var(--muted);font-size:.88rem}.case li em{font-style:normal;color:var(--st-t);font-weight:600;font-size:.82rem;margin-left:auto}
 .case .cta{display:inline-block;margin-top:12px;padding:10px 16px;border-radius:8px;background:var(--ink);color:var(--bg);font-weight:600;text-decoration:none}
 @media (max-width:820px){.case{grid-template-columns:minmax(0,1fr)}}
+.hero .hero-go{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin:16px 0 0}.hero-go .cta{display:inline-block;padding:11px 18px;border-radius:8px;background:var(--ink);color:var(--bg);font-weight:600;text-decoration:none;font-size:1rem}.hero-alt{font-weight:600}
 </style>
 </head>
 <body><a class="skip" href="#m">İçeriğe geç</a>
@@ -83,6 +84,7 @@ footer a{font-weight:600}
 <div class="hero">
 <h1>Veri işinin temel araçları ve istatistik, Türkçe ve yaparak.</h1>
 <p>SQL, Power BI ve Python'ı kurulum ve hesap olmadan tarayıcında çalışarak öğren; istatistikle sonucu sına ve karara çevir. Dört uygulama aynı veri setlerini paylaşır. Sıfırdan başla ya da yapmak istediğin işe göre ilerle.</p>
+<p class="hero-go"><a class="cta" id="vakaGoUst" href="/kesit-sql/vaka/depo/">Depo vakasına başla →</a><a class="hero-alt" href="#vaka">Dört araç tek vakada · yaklaşık 40 dk</a></p>
 </div>
 <section aria-labelledby="ap">
 <h2 id="ap" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">Uygulamalar</h2>
@@ -95,7 +97,7 @@ footer a{font-weight:600}
 </section>
 <section id="vaka" aria-labelledby="vk">
 <h2 id="vk">Bir depo vakasını baştan sona çöz</h2>
-<p class="lead">Dört uygulama tek bir iş sorusunda birleşir. Anadolu Market Gebze deposunda raf düzeni değişti: toplama süresi kısaldı mı, kısaldıysa yeni düzeni diğer depolara yaymaya yeter mi? Her adım öncekinin beklenen çıktısıyla başlar ve sonrakini açar.</p>
+<p class="lead">Dört uygulama tek bir iş sorusunda birleşir. Anadolu Market Gebze deposunda raf düzeni değişti: toplama süresi kısaldı mı, kısaldıysa yeni düzeni diğer depolara yaymaya yeter mi? Her adımda kendi çıktınla ya da örnek veriyle devam edebilirsin; hangisiyle çalıştığın ekranda yazar.</p>
 <div class="case"><ol>
 <li style="--c:var(--sql);--t:var(--sql-t)"><a href="/kesit-sql/vaka/depo/">SQL</a><span>Ham el terminali kayıtlarını temizle ve özetle</span><em data-v="sql"></em></li>
 <li style="--c:var(--py);--t:var(--py-t)"><a href="/kesit-python/vaka/depo/">Python</a><span>Temizliği ve karşılaştırmanın adilliğini denetle</span><em data-v="python"></em></li>
@@ -140,6 +142,6 @@ footer a{font-weight:600}
 document.querySelectorAll('.app').forEach(function(a){try{var o=JSON.parse(localStorage.getItem('kesit.ozet.'+a.dataset.k)||'null');if(o&&o.bitti>0&&o.toplam>0){a.querySelector('.prog').textContent=o.bitti+' / '+o.toplam+' ders tamam';a.querySelector('.go').textContent='Kaldığın yerden devam et →'}}catch(e){}});
 </script>
 <script src="/en-tour.js" defer></script>
-<script>try{var vk=JSON.parse(localStorage.getItem('kesit.vaka.depo')||'{}'),u={sql:'/kesit-sql/vaka/depo/',python:'/kesit-python/vaka/depo/',pbi:'/kesit-powerbi/vaka/depo/',istatistik:'/kesit-istatistik/vaka/depo/'},n=0,nx=null;['sql','python','pbi','istatistik'].forEach(function(k){if(vk[k]&&vk[k].tamam){n++;document.querySelector('[data-v="'+k+'"]').textContent='✓ çözüldü'}else if(!nx)nx=k});if(n){var g=document.getElementById('vakaGo');g.textContent=n===4?'Vaka tamamlandı · yeniden çöz →':'Kaldığın yerden devam et ('+n+'/4) →';if(nx)g.href=u[nx]}}catch(e){}</script>
+<script>try{var vk=JSON.parse(localStorage.getItem('kesit.vaka.depo')||'{}'),u={sql:'/kesit-sql/vaka/depo/',python:'/kesit-python/vaka/depo/',pbi:'/kesit-powerbi/vaka/depo/',istatistik:'/kesit-istatistik/vaka/depo/'},n=0,nx=null;['sql','python','pbi','istatistik'].forEach(function(k){if(vk[k]&&vk[k].tamam){n++;document.querySelector('[data-v="'+k+'"]').textContent='✓ çözüldü'}else if(!nx)nx=k});if(n){var g=document.getElementById('vakaGo'),gu=document.getElementById('vakaGoUst');g.textContent=n===4?'Vaka tamamlandı · yeniden çöz →':'Kaldığın yerden devam et ('+n+'/4) →';gu.textContent=n===4?'Depo vakasını yeniden çöz →':'Kaldığım adıma git ('+n+'/4) →';if(nx){g.href=u[nx];gu.href=u[nx]}}}catch(e){}</script>
 </body>
 </html>

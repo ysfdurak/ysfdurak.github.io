@@ -68,6 +68,12 @@ details summary{cursor:pointer;font-weight:600}
 .vk-kart span{display:block;font-size:.82rem;color:var(--muted)}
 .vk-kart b{font:800 1.35rem var(--f-d);font-variant-numeric:tabular-nums}
 footer.vk-f{border-top:1px solid var(--line);margin-top:28px;padding-top:14px;font-size:.85rem;color:var(--muted)}
+.vk-sec{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 8px}
+.vk-sec button[aria-pressed="true"]{background:var(--pc);border-color:var(--pc);color:#fff}
+.vk-sec button:disabled{cursor:not-allowed;opacity:.55}
+.vk-lnk{padding:0 4px;border:0;background:none;color:var(--c);text-decoration:underline;font:inherit;font-variant-numeric:tabular-nums;min-height:24px}.vk-lnk[aria-current="true"]{font-weight:700;background:var(--surface-2)}
+.vk-kay{padding:8px 12px;border-radius:8px;background:var(--surface-2);border-left:4px solid var(--warn)}.vk-kay.kendi{border-left-color:var(--ok)}
+.vk-soru{counter-reset:s;margin:0}.vk-soru h3{margin:12px 0 4px}
 @media (max-width:760px){.vk-adim{grid-template-columns:repeat(2,minmax(0,1fr))}.vk-iki{grid-template-columns:minmax(0,1fr)}.vk-kart{grid-template-columns:repeat(2,minmax(0,1fr))}.vk-w{padding:0 14px 40px}}
 """
 
@@ -80,8 +86,28 @@ const vkSay=(v,d=0)=>v==null||!isFinite(v)?'—':Number(v).toLocaleString('tr-TR
 const vkEsc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function vkAdimlar(){const s=vkOku();document.querySelectorAll('.vk-adim [data-adim]').forEach(a=>{const k=a.dataset.adim,o=a.querySelector('.durum');if(o)o.textContent=s[k]&&s[k].tamam?'✓ çözüldü':'';});}
 function vkTablo(cols,rows,num=[]){return '<div class="vk-tw"><table><thead><tr>'+cols.map((c,i)=>'<th'+(num.includes(i)?' class="n"':'')+'>'+vkEsc(c)+'</th>').join('')+'</tr></thead><tbody>'+rows.map(r=>'<tr>'+r.map((v,i)=>'<td'+(num.includes(i)?' class="n"':'')+'>'+(typeof v==='number'?vkSay(v,Number.isInteger(v)?0:2):vkEsc(v))+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';}
-function vkCsvIndir(ad,cols,rows){const q=v=>v==null?'':/[",\n]/.test(String(v))?'"'+String(v).replace(/"/g,'""')+'"':String(v);const t=[cols.join(','),...rows.map(r=>r.map(q).join(','))].join('\n')+'\n';const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/csv'}));a.download=ad;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);}
+function vkCsvMetin(cols,rows){const q=v=>v==null?'':/[",\n]/.test(String(v))?'"'+String(v).replace(/"/g,'""')+'"':String(v);return [cols.join(','),...rows.map(r=>r.map(q).join(','))].join('\n')+'\n';}
+function vkCsvIndir(ad,cols,rows){const t=vkCsvMetin(cols,rows);const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/csv'}));a.download=ad;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);}
 function vkCsvOku(t){const L=t.trim().split(/\r?\n/),h=L[0].split(',');return {cols:h,rows:L.slice(1).map(l=>l.split(','))};}
+// Kendi çıktın: 1. adımı çözen kişinin toplama_temiz tablosu sonraki adımlarda seçilebilsin.
+const VK_CSV='kesit.vaka.depo.csv', VK_SUTUN=['satir_id','tarih','vardiya','bolge','duzen','toplayici','sure_sn'];
+const vkCiktiYaz=(csv,n)=>{try{localStorage.setItem(VK_CSV,JSON.stringify({csv,n,at:new Date().toISOString()}))}catch(e){}};
+const vkCiktiOku=()=>{try{const o=JSON.parse(localStorage.getItem(VK_CSV)||'null');return o&&typeof o.csv==='string'?o:null}catch(e){return null}};
+function vkKaynak(el,ornek,degisti){
+  const kendi=vkCiktiOku(),eksik=kendi?VK_SUTUN.filter(c=>!kendi.csv.split(/\r?\n/,1)[0].split(',').includes(c)):[];
+  let sec=kendi&&!eksik.length?'kendi':'ornek';
+  const durum=()=>({kaynak:sec,csv:sec==='kendi'?kendi.csv:ornek});
+  const ciz=()=>{const n=sec==='kendi'?kendi.n:ornek.trim().split(/\r?\n/).length-1;
+    el.innerHTML='<div class="vk-sec" role="group" aria-label="Bu adımda hangi veriyle çalışacaksın?">'
+      +'<button type="button" data-k="kendi" aria-pressed="'+(sec==='kendi')+'"'+(kendi?'':' disabled')+'>Kendi çıktımla devam et</button>'
+      +'<button type="button" data-k="ornek" aria-pressed="'+(sec==='ornek')+'">Örnek veriyle dene</button></div>'
+      +'<p class="vk-kay '+sec+'" role="status"><b>Kullanılan veri:</b> '+(sec==='kendi'
+        ?'senin 1. adım (SQL) çıktın · '+vkSay(n)+' satır · '+vkEsc(new Date(kendi.at).toLocaleString('tr-TR',{dateStyle:'short',timeStyle:'short'}))+' kaydı.'
+        :'örnek veri, yani 1. adımın beklenen çıktısı · '+vkSay(n)+' satır. Bu adımda göreceğin sonuçlar senin SQL çalışmana ait değil.')+'</p>'
+      +(!kendi?'<p class="vk-not">Kendi çıktınla devam etmek için önce <a href="/kesit-sql/vaka/depo/">1. adımı</a> çöz; temiz tablon bu tarayıcıda saklanır.</p>'
+        :eksik.length?'<p class="vk-not">Kaydedilen çıktında şu sütunlar yok: '+eksik.map(vkEsc).join(', ')+'. Bu adım için örnek veriyle devam etmen daha sağlıklı.</p>':'');
+    el.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{if(b.disabled||b.dataset.k===sec)return;sec=b.dataset.k;ciz();degisti(durum());});};
+  ciz();return durum();}
 vkAdimlar();
 """
 

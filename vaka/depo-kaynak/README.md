@@ -19,8 +19,10 @@ Kesit'in dört uygulamasını tek bir iş sorusunda birleştiren vakanın verisi
 - Dört sayfa Chrome'da 390 ve 1366 px'te baştan sona çözüldü (Python adımı gerçek Pyodide 0.27.8 + pandas ile); axe hatası yok, en küçük yazı 12 px.
 
 ## Adımlar arası bağ
-- Her sayfa bir önceki adımın **beklenen çıktısını** gösterir ve onunla başlar; önceki adımı çözmemiş biri de devam edebilir.
-- Ortak ilerleme `localStorage['kesit.vaka.depo']` içindedir (dört uygulama aynı alan adında). Önceki adımı çözen kişiye "senin çıktın bununla aynı" ya da "farklıydı" yazılır. Ana sayfadaki "Bir depo vakasını baştan sona çöz" bölümü kaldığın adımı açar.
+- 1. adımı çözen kişinin `toplama_temiz` tablosu CSV olarak `localStorage['kesit.vaka.depo.csv']` içine yazılır. 2–4. adımlarda iki açık seçenek var: **Kendi çıktımla devam et** (kaydedilen tablo; kaynağı, satır sayısı ve kayıt zamanı yazılır) ve **Örnek veriyle dene** (1. adımın beklenen çıktısı; ekranda "senin SQL çalışmana ait değil" notu çıkar). 1. adımı çözmeyen kişi yalnızca örnek veriyle devam edebilir.
+- Ortak ilerleme `localStorage['kesit.vaka.depo']` içindedir (dört uygulama aynı alan adında). Her adım hangi veriyle çözüldüğünü (`kaynak: kendi | ornek`) kaydeder. Ana sayfanın başındaki düğme ilk gelene "Depo vakasına başla", dönene "Kaldığım adıma git" der.
+- 1. adımda beklenen sonuç kapalı başlar (önce keşif sorguları). 2. adımda "Bir kaydı incele" paneli elenen 63 ve düzeltilen 70 satırın her biri için çalışan kuralı, nedenini ve sonucunu gösterir (`incele_listesi()` üretir, sayıları `beklenen.json` ile denetler).
+- 4. adım üç soruyu ayırır: ne gözlendi, hedef karşılandı mı, fark yeni düzene bağlanabilir mi. Üçüncüsünü test cevaplamaz: öğrenci kararını yazar, kaydedince uzman değerlendirmesi ve sözcük temelli öz değerlendirme açılır (p değeri ile etki büyüklüğü ayrı: ASA 2016 bildirgesi).
 
 ## Değiştirmek
 Dört depo yan yana klonlu olmalı (`kesit-sql`, `kesit-python`, `kesit-powerbi`, `kesit-istatistik`, `ysfdurak.github.io`).
