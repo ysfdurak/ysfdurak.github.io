@@ -31,4 +31,4 @@ cd ysfdurak.github.io/vaka/depo-kaynak
 python3 uret.py       # veri + beklenen.json (pandas, scipy gerekir)
 python3 sayfalar.py   # dört index.html, beklenen.json ve Power BI dax.js kopyası
 ```
-Sonra her depoda testi çalıştır ve SQL, Python, Power BI depolarında `release-manifest.json` dosya özetlerini güncelle (CI denetler). Sayfaları elle düzenleme: üreteç üzerine yazar.
+Sonra her depoda testi çalıştır ve SQL, Python, Power BI depolarında `release-manifest.json` dosya özetlerini güncelle (CI denetler). **Kaynak dalları da güncelle:** `kesit-sql` ve `kesit-python` depolarının `kaynak` dalında `vaka/depo/index.html`, `kesit-powerbi`'nin `kaynak` dalında `app/build/gh/static/vaka/depo/index.html` kopyası durur; derleme `main`'i bu kopyalardan üretir. Üretilen sayfaları oraya da kopyala, yoksa sonraki derleme eski sayfayı geri getirir. Sayfaları elle düzenleme: üreteç üzerine yazar.
