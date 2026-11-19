@@ -72,6 +72,9 @@ footer a{font-weight:600}
 .case li::before{content:counter(c);font:800 1rem var(--f-d);color:var(--t)}
 .case li a{font-weight:600;text-decoration:none}.case li a:hover{text-decoration:underline}
 .case li span{color:var(--muted);font-size:.88rem}.case li em{font-style:normal;color:var(--st-t);font-weight:600;font-size:.82rem;margin-left:auto}
+.vk-durum{margin:14px 0 0;padding:14px 16px;border:1px solid var(--line,#ddd);border-radius:10px;background:var(--card,#fff)}
+.vk-durum h3{margin:0 0 6px;font-size:1rem}.vk-durum ul{margin:6px 0;padding-left:18px}.vk-durum li.sira{font-weight:600}
+.vk-durum .kucuk{font-size:.9rem;opacity:.85}.vk-durum button{font:inherit;margin:6px 8px 0 0;padding:6px 12px;border-radius:8px;border:1px solid var(--line,#ccc);background:transparent;cursor:pointer}
 .case .cta{display:inline-block;margin-top:12px;padding:10px 16px;border-radius:8px;background:var(--ink);color:var(--bg);font-weight:600;text-decoration:none}
 @media (max-width:820px){.case{grid-template-columns:minmax(0,1fr)}}
 .hero .hero-go{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin:16px 0 0}.hero-go .cta{display:inline-block;padding:11px 18px;border-radius:8px;background:var(--ink);color:var(--bg);font-weight:600;text-decoration:none;font-size:1rem}.hero-alt{font-weight:600}
@@ -104,6 +107,7 @@ footer a{font-weight:600}
 <li style="--c:var(--pbi);--t:var(--pbi-t)"><a href="/kesit-powerbi/vaka/depo/">Power BI</a><span>DAX ölçüleriyle kazancı panoda göster</span><em data-v="pbi"></em></li>
 <li style="--c:var(--st);--t:var(--st-t)"><a href="/kesit-istatistik/vaka/depo/">İstatistik</a><span>İstatistiksel fark var, ama operasyonel olarak yeterli mi?</span><em data-v="istatistik"></em></li>
 </ol><div><p style="margin:0">Yaklaşık 40 dakika. Gerçek motorlar tarayıcıda çalışır: SQLite, Python (pandas), Kesit DAX motoru ve Kesit İstatistik. Beklenen sonuçlar ayrıca SQLite, pandas ve SciPy ile hesaplanıp karşılaştırıldı.</p><a class="cta" id="vakaGo" href="/kesit-sql/vaka/depo/">Vakaya başla →</a></div></div>
+<div id="vakaDurum" class="vk-durum" role="region" aria-label="Kaldığın yer ve kendi çıktın" hidden></div>
 </section>
 <section aria-labelledby="ry">
 <h2 id="ry">Hangi işi yapmak istiyorsun?</h2>
@@ -142,6 +146,22 @@ footer a{font-weight:600}
 document.querySelectorAll('.app').forEach(function(a){try{var o=JSON.parse(localStorage.getItem('kesit.ozet.'+a.dataset.k)||'null');if(o&&o.bitti>0&&o.toplam>0){a.querySelector('.prog').textContent=o.bitti+' / '+o.toplam+' ders tamam';a.querySelector('.go').textContent='Kaldığın yerden devam et →'}}catch(e){}});
 </script>
 <script src="/en-tour.js" defer></script>
-<script>try{var vk=JSON.parse(localStorage.getItem('kesit.vaka.depo')||'{}'),u={sql:'/kesit-sql/vaka/depo/',python:'/kesit-python/vaka/depo/',pbi:'/kesit-powerbi/vaka/depo/',istatistik:'/kesit-istatistik/vaka/depo/'},n=0,nx=null;['sql','python','pbi','istatistik'].forEach(function(k){if(vk[k]&&vk[k].tamam){n++;document.querySelector('[data-v="'+k+'"]').textContent='✓ çözüldü'}else if(!nx)nx=k});if(n){var g=document.getElementById('vakaGo'),gu=document.getElementById('vakaGoUst');g.textContent=n===4?'Vaka tamamlandı · yeniden çöz →':'Kaldığın yerden devam et ('+n+'/4) →';gu.textContent=n===4?'Depo vakasını yeniden çöz →':'Kaldığım adıma git ('+n+'/4) →';if(nx){g.href=u[nx];gu.href=u[nx]}}}catch(e){}</script>
+<script>try{var vk=JSON.parse(localStorage.getItem('kesit.vaka.depo')||'{}'),u={sql:'/kesit-sql/vaka/depo/',python:'/kesit-python/vaka/depo/',pbi:'/kesit-powerbi/vaka/depo/',istatistik:'/kesit-istatistik/vaka/depo/'},n=0,nx=null;['sql','python','pbi','istatistik'].forEach(function(k){if(vk[k]&&vk[k].tamam){n++;document.querySelector('[data-v="'+k+'"]').textContent='✓ çözüldü'}else if(!nx)nx=k});if(n){var g=document.getElementById('vakaGo'),gu=document.getElementById('vakaGoUst');g.textContent=n===4?'Vaka tamamlandı · yeniden çöz →':'Kaldığın yerden devam et ('+n+'/4) →';gu.textContent=n===4?'Depo vakasını yeniden çöz →':'Kaldığım adıma git ('+n+'/4) →';if(nx){g.href=u[nx];gu.href=u[nx]}}
+/* Kaldığın yer ve kendi çıktın (dış inceleme, Kasım 2026): ertesi gün dönen kişi hangi adımda kaldığını, hangi veriyle
+   çözdüğünü ve kendi SQL çıktısının nerede saklandığını tek bakışta görür. Dört uygulama aynı alan adında olduğu için
+   ilerleme (kesit.vaka.depo) ve 1. adımın çıktısı (kesit.vaka.depo.csv) bu sayfadan okunabilir. */
+var ad={sql:'1. SQL',python:'2. Python',pbi:'3. Power BI',istatistik:'4. İstatistik'},trh=function(t){try{return new Date(t).toLocaleString('tr-TR',{day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'})}catch(e){return ''}},
+cik=null;try{cik=JSON.parse(localStorage.getItem('kesit.vaka.depo.csv')||'null')}catch(e){}
+var bas=Object.keys(ad).some(function(k){return vk[k]})||cik;
+if(bas){var d=document.getElementById('vakaDurum'),h='<h3>Kaldığın yer</h3><ul>';
+ Object.keys(ad).forEach(function(k){var a=vk[k];h+='<li'+(k===nx?' class="sira"':'')+'><a href="'+u[k]+'">'+ad[k]+'</a>: '+(a&&a.tamam?'✓ çözüldü'+(a.kaynak?' · '+(a.kaynak==='kendi'?'kendi çıktınla':'örnek veriyle'):'')+(a.at?' · '+trh(a.at):''):k===nx?'<b>sıradaki adım</b>':'henüz değil')+'</li>'});
+ h+='</ul><h3>Kendi çıktın nerede?</h3>';
+ if(cik&&cik.csv){h+='<p style="margin:0">1. adımda ürettiğin <code>toplama_temiz</code> tablosu: <b>'+(cik.n?Number(cik.n).toLocaleString('tr-TR'):'?')+' satır</b>, kaydedilme '+trh(cik.at)+'. <b>Yalnız bu tarayıcıda</b> saklanıyor (yerel depolama, <code>kesit.vaka.depo.csv</code>). Başka cihazda ya da gizli pencerede görünmez; tarayıcı verisini silersen gider. 2–4. adımlarda "Kendi çıktımla devam et" bu tabloyu kullanır.</p><button type="button" id="vkIndir">CSV olarak indir</button><button type="button" id="vkSil">Kendi çıktımı sil</button>'}
+ else h+='<p style="margin:0">Henüz kendi çıktın yok. 1. adımı (SQL) çözünce tablon bu tarayıcıda saklanır; o zamana kadar sonraki adımlar örnek veriyle çalışır ve ekranda bunu yazar.</p>';
+ h+='<p class="kucuk" style="margin:8px 0 0">İlerlemen hesap gerektirmez ve sunucuya gitmez; yalnız bu tarayıcıda durur.</p>';
+ d.innerHTML=h;d.hidden=false;
+ var bi=document.getElementById('vkIndir');if(bi)bi.onclick=function(){var b=new Blob([cik.csv],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='toplama_temiz.csv';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},1000)};
+ var bs=document.getElementById('vkSil');if(bs)bs.onclick=function(){if(confirm('Kendi SQL çıktın bu tarayıcıdan silinsin mi? Sonraki adımlar örnek veriyle devam eder.')){try{localStorage.removeItem('kesit.vaka.depo.csv')}catch(e){}location.reload()}};
+}}catch(e){}</script>
 </body>
 </html>
