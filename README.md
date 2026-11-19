@@ -11,6 +11,9 @@ SQL, Power BI, Python ve istatistiği Türkçe, kurulum ve hesap olmadan tarayı
 
 Tek sayfalık statik site; derleme adımı yoktur. Yazı tipleri SIL Open Font License ile dağıtılır (`vendor/fonts`).
 
+
+**Projeyi anlatırken:** Mülakatta sorulabilecek 10 soru, kısa cevaplar ve verilen kararlar (sorun → karar → bedel): [docs/MULAKAT.md](docs/MULAKAT.md).
+
 ## Lisans
 
 Bu proje [PolyForm Shield 1.0.0](LICENSE.md) lisansıyla yayınlanır. Kaynak kodu açıktır, ancak resmi anlamda bir "açık kaynak" lisansı değildir.
