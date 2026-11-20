@@ -39,7 +39,7 @@ sen_sat = [('Satıcıların tamamı kargoya son tarihinde versin', 'Satıcı sü
 tablo = ''.join(f'<tr><td>{a}</td><td>{b}</td><td class="n">{sayi(c)}</td><td class="n">%{pct(c, N)}</td><td class="n">{"+" if c>G else "−"}{sayi(abs(c-G))}</td></tr>' for a, b, c in sen_sat)
 uy = ''.join(f"<tr><td class=\"n\">{tr(u['esik'],1)} kat</td><td class=\"n\">%{tr(u['siparis_payi'])}</td><td class=\"n\">%{tr(u['gec_uyarili'])}</td><td class=\"n\">%{tr(u['gec_uyarisiz'])}</td></tr>" for u in P['uyari'])
 
-html = f'''<!doctype html><html lang="tr"><head><meta charset="utf-8"><title>Teslimat analizi</title><meta name="viewport" content="width=device-width,initial-scale=1">
+html = f'''<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'"><title>Teslimat analizi</title><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Gerçek bir e-ticaret verisinde geç teslimat, müşteri puanı ve hangi iyileştirmenin önce denenmesi gerektiği.">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/vendor/fonts.css">
 <style>
