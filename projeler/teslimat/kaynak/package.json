@@ -1,1 +1,1 @@
-{ "name": "teslimat-analizi", "private": true, "type": "module", "dependencies": { "@electric-sql/pglite": "0.5.16" } }
+{ "name": "teslimat-analizi", "private": true, "type": "module", "dependencies": { "@electric-sql/pglite": "0.5.17" } }
