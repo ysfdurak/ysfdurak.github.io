@@ -9,7 +9,7 @@
     key: 'kesit_lang',
     bg: '#16323a',
     accent: '#9fe0c9',
-    intro: "Kesit is a free set of four browser apps that teach the core data skills — SQL, Power BI, Python and statistics — <b>in Turkish</b>, by doing, with no setup or account. Teaching data work in Turkish is the point of the project, so the apps stay Turkish; code, functions and technical terms are in English as at work. This guide explains each app; it stays on when you open one.",
+    intro: "Kesit is a free set of five browser apps that teach the core data skills — Excel, SQL, Power BI, Python and statistics — <b>in Turkish</b>, by doing, with no setup or account. Teaching data work in Turkish is the point of the project, so the apps stay Turkish; code, functions and technical terms are in English as at work. This guide explains each app; it stays on when you open one.",
     glossSelector: "h1, main h2, h2, main b, .go",
     blockGloss: "h1, h2",
     navGloss: "",
@@ -32,13 +32,15 @@
       "SQL'e başla →": "Start SQL",
       "Power BI'a başla →": "Start Power BI",
       "Python'a başla →": "Start Python",
-      "İstatistiğe başla →": "Start statistics"
+      "İstatistiğe başla →": "Start statistics",
+      "Excel'e başla →": "Start Excel",
+      "Excel makro": "Excel macros"
     },
     route: () => 'home',
     guide: {
       "home": {
         "t": "Kesit — data skills in Turkish",
-        "p": "Four apps share the same fictional company data (e-commerce, bank, HR, courier, airline, bike sharing), so one story connects the skills: query with SQL → test with Python → report with Power BI → interpret with statistics. Code runs in the browser and exercises are checked instantly; progress stays in the browser.",
+        "p": "The apps share the same fictional company data (e-commerce, bank, HR, courier, airline, bike sharing), so one story connects the skills: query with SQL → test with Python → report with Power BI → interpret with statistics. Kesit Excel teaches Turkish Excel on the same data (formulas, PivotTables, Power Query, charts, VBA). Code runs in the browser and exercises are checked instantly; progress stays in the browser.",
         "try": "Pick a role under “Hangi işi yapmak istiyorsun?” (Which job do you want to do?) to see the suggested order of apps, or open Kesit SQL."
       }
     },
