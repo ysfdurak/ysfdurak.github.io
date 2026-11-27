@@ -63,7 +63,7 @@ const COMMON_GUIDE = {
   dict: { t: 'Glossary', p: 'Key terms with short Turkish explanations.' },
   data: {
     t: 'Datasets',
-    p: 'The shared fictional datasets used across all four Kesit apps (e-commerce, bank, airline, food delivery, HR, bike sharing). The same company data runs through SQL, Power BI, Python and statistics, so one story connects the skills. Known quirks left in on purpose are listed here.',
+    p: 'The shared fictional datasets used across the Kesit apps (e-commerce, bank, airline, food delivery, HR, bike sharing). The same company data runs through SQL, Power BI, Python and statistics, so one story connects the skills. Known quirks left in on purpose are listed here.',
   },
   projeler: { t: 'Capstone projects', p: 'End-of-path projects on the shared datasets.' },
   lesson: {
@@ -73,7 +73,7 @@ const COMMON_GUIDE = {
 };
 
 const INTRO = name =>
-  `${name} is one of four Kesit apps that teach data skills — SQL, Power BI, Python and statistics — <b>in Turkish</b>, in the browser, with no setup or account. Teaching data work in Turkish is the point of the project, so the interface stays Turkish; code, functions and technical terms are in English as at work. This guide explains each screen.`;
+  `${name} is one of five Kesit apps that teach data skills — Excel, SQL, Power BI, Python and statistics — <b>in Turkish</b>, in the browser, with no setup or account. Teaching data work in Turkish is the point of the project, so the interface stays Turkish; code, functions and technical terms are in English as at work. This guide explains each screen.`;
 
 const hashKey = (alias = {}) =>
   `() => {
@@ -255,7 +255,7 @@ const APPS = {
 APPS['kesit-ana'] = {
   name: 'Kesit',
   intro:
-    'Kesit is a free set of four browser apps that teach the core data skills — SQL, Power BI, Python and statistics — <b>in Turkish</b>, by doing, with no setup or account. Teaching data work in Turkish is the point of the project, so the apps stay Turkish; code, functions and technical terms are in English as at work. This guide explains each app; it stays on when you open one.',
+    'Kesit is a free set of five browser apps that teach the core data skills — Excel, SQL, Power BI, Python and statistics — <b>in Turkish</b>, by doing, with no setup or account. Teaching data work in Turkish is the point of the project, so the apps stay Turkish; code, functions and technical terms are in English as at work. This guide explains each app; it stays on when you open one.',
   sel: 'h1, main h2, h2, main b, .go',
   block: 'h1, h2',
   nav: null,
@@ -280,11 +280,13 @@ APPS['kesit-ana'] = {
     "Power BI'a başla →": 'Start Power BI',
     "Python'a başla →": 'Start Python',
     'İstatistiğe başla →': 'Start statistics',
+    "Excel'e başla →": 'Start Excel',
+    'Excel makro': 'Excel macros',
   },
   guide: {
     home: {
       t: 'Kesit — data skills in Turkish',
-      p: 'Four apps share the same fictional company data (e-commerce, bank, HR, courier, airline, bike sharing), so one story connects the skills: query with SQL → test with Python → report with Power BI → interpret with statistics. Code runs in the browser and exercises are checked instantly; progress stays in the browser.',
+      p: 'The apps share the same fictional company data (e-commerce, bank, HR, courier, airline, bike sharing), so one story connects the skills: query with SQL → test with Python → report with Power BI → interpret with statistics. Kesit Excel teaches Turkish Excel on the same data (formulas, PivotTables, Power Query, charts, VBA). Code runs in the browser and exercises are checked instantly; progress stays in the browser.',
       try: 'Pick a role under “Hangi işi yapmak istiyorsun?” (Which job do you want to do?) to see the suggested order of apps, or open Kesit SQL.',
     },
   },
