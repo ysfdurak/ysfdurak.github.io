@@ -97,14 +97,14 @@ const APPS = {
     guide: {
       home: {
         t: 'Kesit SQL',
-        p: '295 lessons, 1,944 exercises and 578 practice tasks, from the first SELECT to window functions, query optimisation and data warehousing. A real SQLite database runs in the browser (sql.js); every query is checked instantly.',
+        p: '296 lessons, 2,006 exercises and 602 practice tasks, from the first SELECT to window functions, query optimisation and data warehousing. A real SQLite database runs in the browser (sql.js); every query is checked instantly. Each lesson has a downloadable task sheet, and 7 dataset packs install the same data in your own SQL Server, PostgreSQL, MySQL or Oracle.',
         try: 'Open “Dersler” (Lessons) and start “1 dakikada ilk sorgun” — your first query in one minute.',
       },
       curr: {
         t: 'Lessons',
-        p: 'All lessons by level. Six SQL dialects — SQL Server, PostgreSQL, MySQL, Oracle, BigQuery and SQLite: examples are shown in the dialect you choose and exercises are checked against its rules (the other five are emulated on top of SQLite).',
+        p: 'All lessons by level. Five SQL dialects — SQL Server, PostgreSQL, MySQL, Oracle and SQLite: examples are shown in the dialect you choose and exercises are checked against its rules (the others are emulated on top of SQLite). BigQuery has its own module.',
       },
-      pratik: { t: 'Practice', p: '578 practice tasks on the shared datasets, grouped by topic and difficulty.' },
+      pratik: { t: 'Practice', p: '602 practice tasks on the shared datasets, grouped by topic and difficulty.' },
       play: {
         t: 'SQL Arena',
         p: 'Challenges with hidden tests, SQL detective cases, result prediction, query puzzles and a weekly tournament.',
@@ -143,7 +143,7 @@ const APPS = {
     guide: {
       home: {
         t: 'Kesit Power BI',
-        p: '150 lessons, 1,250 in-lesson exercises and 117 practice tasks on Power BI, DAX and Fabric. Measures are written against a DAX-emulating engine that runs in the browser, so every exercise is checked instantly without installing Power BI.',
+        p: '158 lessons, 1,438 in-lesson exercises (including building visuals and models) and 117 practice tasks on Power BI, DAX and Fabric. Measures are written against a DAX-emulating engine that runs in the browser, so every exercise is checked instantly without installing Power BI.',
         try: 'Open “Dersler” (Lessons) and start “1 dakikada ilk ölçün” — your first measure in one minute.',
       },
       curr: { t: 'Lessons', p: 'From the first measure to expanded tables, calculation groups and Direct Lake, in Basic, Intermediate and Advanced levels.' },
@@ -187,7 +187,7 @@ const APPS = {
     guide: {
       home: {
         t: 'Kesit Python',
-        p: '156 lessons, 3,240 in-lesson exercises and 562 practice tasks. Real Python (CPython compiled to WebAssembly via Pyodide) runs in a Web Worker in the browser; exercises are checked by automated tests. An infinite loop does not freeze the page — Stop and a 60-second limit restart the engine.',
+        p: '156 lessons, 3,255 in-lesson exercises and 562 practice tasks. Real Python (CPython compiled to WebAssembly via Pyodide) runs in a Web Worker in the browser; exercises are checked by automated tests. An infinite loop does not freeze the page — Stop and a 60-second limit restart the engine.',
         try: 'Open “Dersler” (Lessons) and start “İlk kodun” — your first code in a few minutes.',
       },
       curr: { t: 'Lessons', p: 'From the basics to automation, data analysis, web, machine learning and LLM applications, in three levels.' },
@@ -225,7 +225,7 @@ const APPS = {
     guide: {
       home: {
         t: 'Kesit İstatistik',
-        p: '120 lessons in 30 modules plus 8 elective method lessons, from population and sample to tests, regression, experiments, time series, Bayes, quality, statistical learning and causal inference. Calculators are checked against SciPy references; case results are computed with pandas, SciPy and statsmodels.',
+        p: '120 lessons in 30 modules plus 8 elective method lessons, from population and sample to tests, regression, experiments, time series, Bayes, quality, statistical learning and causal inference. Calculators are checked against SciPy references; case results are computed with pandas, SciPy and statsmodels. Every lesson ends with 3 hands-on tasks on the shared Kesit data (360 in total), with a downloadable Python notebook per lesson and an Excel workbook per module.',
         try: 'Open “Kesit verileriyle” (With Kesit data) to see a statistics question answered with SQL, Python and DAX on the shared datasets.',
       },
       start: { t: 'Getting started', p: 'Where to begin depending on your background and goal.' },

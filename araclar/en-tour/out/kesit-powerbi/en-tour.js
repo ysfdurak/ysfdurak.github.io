@@ -109,7 +109,7 @@
       },
       "home": {
         "t": "Kesit Power BI",
-        "p": "150 lessons, 1,250 in-lesson exercises and 117 practice tasks on Power BI, DAX and Fabric. Measures are written against a DAX-emulating engine that runs in the browser, so every exercise is checked instantly without installing Power BI.",
+        "p": "158 lessons, 1,438 in-lesson exercises (including building visuals and models) and 117 practice tasks on Power BI, DAX and Fabric. Measures are written against a DAX-emulating engine that runs in the browser, so every exercise is checked instantly without installing Power BI.",
         "try": "Open “Dersler” (Lessons) and start “1 dakikada ilk ölçün” — your first measure in one minute."
       },
       "curr": {
