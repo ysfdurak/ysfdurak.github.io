@@ -103,7 +103,7 @@
       },
       "home": {
         "t": "Kesit Python",
-        "p": "156 lessons, 3,240 in-lesson exercises and 562 practice tasks. Real Python (CPython compiled to WebAssembly via Pyodide) runs in a Web Worker in the browser; exercises are checked by automated tests. An infinite loop does not freeze the page — Stop and a 60-second limit restart the engine.",
+        "p": "156 lessons, 3,255 in-lesson exercises and 562 practice tasks. Real Python (CPython compiled to WebAssembly via Pyodide) runs in a Web Worker in the browser; exercises are checked by automated tests. An infinite loop does not freeze the page — Stop and a 60-second limit restart the engine.",
         "try": "Open “Dersler” (Lessons) and start “İlk kodun” — your first code in a few minutes."
       },
       "curr": {
